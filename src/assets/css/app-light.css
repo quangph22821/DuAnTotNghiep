@@ -8532,7 +8532,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap4 .select2-select
       -moz-border-radius: 5px;
       border-radius: 5px; }
       .wizard > .actions a:hover {
-        background: #fd3d57;
+        background: #fff;
         color: #ffffff;
         display: block;
         padding: 0.5em 1em;
@@ -8541,7 +8541,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap4 .select2-select
         -moz-border-radius: 5px;
         border-radius: 5px; }
       .wizard > .actions a:active {
-        background: #fd3d57;
+        background: #ffffff;
         color: #ffffff;
         display: block;
         padding: 0.5em 1em;
@@ -8553,7 +8553,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap4 .select2-select
       background: #f8f9fa;
       color: #6c757d; }
       .wizard > .actions .disabled a:hover {
-        background: #f8f9fa;
+        background: white;
         color: #6c757d; }
       .wizard > .actions .disabled a:active {
         background: #f8f9fa;
