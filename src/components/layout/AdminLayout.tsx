@@ -1,14 +1,15 @@
-import { Outlet } from "react-router-dom"
-import HeaderAdmin from "../header/headerAdmin"
-
+import { Outlet } from "react-router-dom";
+import HeaderAdmin from "../header/headerAdmin";
 
 const AdminLayout = () => {
-  return <>
-  <div className="bg-gray-100 font-family-karla flex">
-  <HeaderAdmin/>
-    <Outlet/>
-  </div>
-  </>
-}
+  return (
+    <body className="vertical  light  ">
+      <div className="wrapper">
+        <HeaderAdmin />
+        <Outlet />
+      </div>
+    </body>
+  );
+};
 
-export default AdminLayout
+export default AdminLayout;
