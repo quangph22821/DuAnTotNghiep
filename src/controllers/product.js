@@ -53,12 +53,12 @@ export const getId = async (req, res) => {
 
 export const postProduct = async (req, res) => {
     try {
-        const {error} = ProductSchema.validate(req.body)
-        if(error){
-            return res.status(400).json({
-                message: error.details[0].message
-            })
-        }
+        // const {error} = ProductSchema.validate(req.body)
+        // if(error){
+        //     return res.status(400).json({
+        //         message: error.details[0].message
+        //     })
+        // }
         const product = await Product.create(req.body)
         if (!product) {
             return res.status(404).json({
