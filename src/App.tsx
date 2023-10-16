@@ -55,7 +55,7 @@ const router = createBrowserRouter([
       // Products
       { path: "/admin/listPro", element: <ListProductsPage /> },
       { path: "/admin/createPro", element: <CreateProducts /> },
-      { path: "/admin/updatePro", element: <UpdateProducts /> },
+      { path: "/admin/updatePro/:id", element: <UpdateProducts /> },
 
       // Category
       { path: "/admin/listCate", element: <ListCategoryPage /> },
