@@ -1,5 +1,5 @@
 import instance from "."
-import { ICategory,} from "../models/products"
+import { ICategory} from "../models/products"
 
 export const getAll = ()=>{
     return instance.get("category")
@@ -10,11 +10,11 @@ export const getOne = (_id:string)=>{
 }
 
 export const add = (body:ICategory)=>{
-    return instance.post("category"+body)
+    return instance.post("category",body)
 }
 
-export const remove = (id:any)=>{
-    return instance.delete(`category/${id}`)
+export const remove = (_id:any)=>{
+    return instance.delete(`category/${_id}`)
 }
 
 export const update = (body:ICategory)=>{

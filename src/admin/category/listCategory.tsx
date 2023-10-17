@@ -1,6 +1,35 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { AppDispatch, RootState } from "../../store";
+import {
+  fetchCategoriesAll,
+  fetchCategoriesRemove,
+} from "../../redux/categories.reducer";
+import { useEffect } from "react";
 
 const ListCategoryPage = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { category} = useSelector((state: RootState) => state.categories)
+  const fetchCategories = async () => {
+    try {
+      await dispatch(fetchCategoriesAll()).unwrap();
+    } catch (error) {}
+  };
+
+  console.log(category);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const checkDelete = async (id: string) => {
+    const tb = window.confirm("Bạn muốn xóa sản phẩm này ");
+    if (tb) {
+      await dispatch(fetchCategoriesRemove(id)).unwrap();
+      await dispatch(fetchCategoriesAll()).unwrap();
+    }
+  };
+
   return (
     <>
       <main role="main" className="main-content">
@@ -67,82 +96,28 @@ const ListCategoryPage = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <img src="" alt="avatar" />
-                            </td>
-                            <td>
-                              <Link to="/admin/updateCate">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <img src="" alt="avatar" />
-                            </td>
-                            <td>
-                              <Link to="">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <img src="" alt="avatar" />
-                            </td>
-                            <td>
-                              <Link to="">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <img src="" alt="avatar" />
-                            </td>
-                            <td>
-                              <Link to="">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
+                          {category.map((item, index) => (
+                            
+                            <tr>
+                              <td>{index + 1}</td>
+                              <td>{item.name}</td>
+                              <td>
+                                <img src={item.img[0]} alt="avatar" />
+                              </td>
+                              <td>
+                                <Link to={`/admin/updateCate/${item._id}`}>
+                                  <span className="badge badge-warning mx-2">
+                                    Update
+                                  </span>
+                                </Link>
+                                <button onClick={() => checkDelete(item._id)}>
+                                  <span className="badge badge-danger">
+                                    Delete
+                                  </span>
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                       <nav

@@ -60,7 +60,7 @@ const router = createBrowserRouter([
       // Category
       { path: "/admin/listCate", element: <ListCategoryPage /> },
       { path: "/admin/createCate", element: <CreateCategory /> },
-      { path: "/admin/updateCate", element: <UpdateCategory /> },
+      { path: "/admin/updateCate/:id", element: <UpdateCategory /> },
 
       // Origin
       { path: "/admin/listOri", element: <ListOriginPage /> },
@@ -75,7 +75,7 @@ const router = createBrowserRouter([
       // Category
       { path: "/admin/listCate", element: <ListCategoryPage /> },
       { path: "/admin/createCate", element: <CreateCategory /> },
-      { path: "/admin/updateCate", element: <UpdateCategory /> },
+      { path: "/admin/updateCate/:id", element: <UpdateCategory /> },
 
       // Cart
       { path: "/admin/listCart", element: <ListCartPage /> },
