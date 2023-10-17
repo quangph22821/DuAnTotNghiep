@@ -1,4 +1,44 @@
+import { useNavigate, useParams } from "react-router-dom";
+import { AppDispatch } from "../../store";
+import { useDispatch } from "react-redux";
+import { IOrigin } from "../../models/products";
+import { useForm } from "react-hook-form";
+import { fetchOriginOne, fetchOriginUpdate } from "../../redux/origin.reducer";
+import { useEffect } from "react";
+
 const UpdateOrigin = () => {
+  const navigate = useNavigate()
+  const {id} = useParams()
+  console.log(id);
+  const dispatch = useDispatch<AppDispatch>()
+  const {register,handleSubmit,formState:{errors}} = useForm<IOrigin>({
+    defaultValues: async () => {
+      if (id) {
+        return await fetchOriginById(id)
+      }
+    }
+  })
+  const onSubmit = async (body:any) => {
+    try {
+    
+   
+        await dispatch(fetchOriginUpdate(body)).unwrap()
+        navigate("/admin/listOri")
+      console.log(body);
+      
+    } catch (error) { /* empty */ }
+  }
+
+  const fetchOriginById = async (id: string) => {
+    const data  = await dispatch (fetchOriginOne(id)).unwrap()
+    return data.origin
+
+  }
+  useEffect(() => {
+    if (id) {
+      fetchOriginById(id)
+    }
+  }, [])
   return (
     <>
       <main role="main" className="main-content">
@@ -20,11 +60,12 @@ const UpdateOrigin = () => {
                               type="text"
                               className="form-control"
                               id="inputEmail5"
+                              {...register("name")}
                             />
                           </div>
                         </div>
                         <button
-                          type="submit"
+                          type="submit"onClick={handleSubmit(onSubmit)}
                           className="btn btn-success bg-green-600 color-while mx-3"
                         >
                           Update

@@ -10,7 +10,7 @@ export const getOne = (_id: string) => {
 }
 
 export const add = (body: IOrigin) => {
-    return instance.post("origin" + body)
+    return instance.post("origin", body)
 }
 
 export const remove = (id: any) => {

@@ -28,9 +28,7 @@ const UpdateProducts = () => {
         navigate("/admin/listPro")
       console.log(body);
       
-    } catch (error) {
-      
-    }
+    } catch (error) { /* empty */ }
   }
 
   const fetchProductById = async (id: string) => {

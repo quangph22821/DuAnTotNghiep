@@ -13,9 +13,7 @@ const ListProductsPage = () => {
   const fetchProducts = async () => {
     try {
       await dispatch(fetchProductsAll()).unwrap()
-    } catch (error) {
-
-    }
+    } catch (error) { /* empty */ }
   }
   console.log(product);
 

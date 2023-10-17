@@ -19,9 +19,7 @@ const CreateProducts = () => {
         navigate("/admin/listPro")
       console.log(body);
       
-    } catch (error) {
-      
-    }
+    } catch (error) { /* empty */ }
   }
   const uploadFiles = async (files: FileList): Promise<string[]> => {
     const CLOUD_NAME = "djhzlcf7o";

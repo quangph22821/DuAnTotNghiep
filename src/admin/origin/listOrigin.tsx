@@ -1,6 +1,32 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { AppDispatch, RootState } from "../../store";
+
+import { useEffect } from "react";
+import { fetchOriginAll, fetchOriginRemove } from "../../redux/origin.reducer";
 
 const ListOriginPage = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { origin } = useSelector((state: RootState) => state.origin)
+  const fetchOrigin = async () => {
+    try {
+      await dispatch(fetchOriginAll()).unwrap()
+    } catch (error) { /* empty */ }
+  }
+  console.log(origin);
+
+  useEffect(() => {
+    fetchOrigin()
+  }, [])
+
+  const checkDelete = async (id: string) => {
+
+    const tb = window.confirm("Are you sure you want to delete")
+    if (tb) {
+      await dispatch(fetchOriginRemove(id)).unwrap()
+      await dispatch(fetchOriginAll()).unwrap()
+    }
+  }
   return (
     <>
       <main role="main" className="main-content">
@@ -10,7 +36,7 @@ const ListOriginPage = () => {
               <div className="row">
                 {/* Striped rows */}
                 <div className="col-md-12 my-4">
-                  <h2 className="h4 mb-1">Category</h2>
+                  <h2 className="h4 mb-1">Origin</h2>
                   <p className="mb-4">
                     Customized table based on Bootstrap with additional elements
                     and more functions
@@ -48,7 +74,7 @@ const ListOriginPage = () => {
                         <div className="col ml-auto">
                           <div className="dropdown float-right">
                             <Link
-                              to="/admin/createMate"
+                              to="/admin/createOri"
                               className="btn btn-primary float-right ml-3"
                             >
                               Add more +
@@ -66,70 +92,22 @@ const ListOriginPage = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <Link to="/admin/updateOri">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <Link to="">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <Link to="">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <Link to="">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
+                     {origin.map((item,index)=>(
+                           <tr>
+                           <td>{index +1}</td>
+                           <td>{item.name}</td>
+                         
+                           <td>
+                             <Link to={`/admin/updateOri/${item._id}`}>
+                               <span className="badge badge-warning mx-2">
+                                 Update
+                               </span>
+                             </Link>
+                             <button><span className="badge badge-danger" onClick={()=>checkDelete(item._id)}>Delete</span></button>
+                           </td>
+                         </tr>            
+                     
+                     ))}
                         </tbody>
                       </table>
                       <nav

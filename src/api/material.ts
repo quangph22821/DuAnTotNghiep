@@ -10,7 +10,7 @@ export const getOne = (_id:string)=>{
 }
 
 export const add = (body:IMaterial)=>{
-    return instance.post("material"+body)
+    return instance.post("material",body)
 }
 
 export const remove = (id:any)=>{
