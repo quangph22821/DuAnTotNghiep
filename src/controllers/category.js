@@ -50,15 +50,17 @@ export const get = async (req, res) => {
         });
     }
 };
+
+
 export const create = async (req, res) => {
     try {
         // validate
-        const { error } = categorySchema.validate(req.body);
-        if (error) {
-            return res.status(400).json({
-                message: error.details[0].message,
-            });
-        }
+        // const { error } = categorySchema.validate(req.body);
+        // if (error) {
+        //     return res.status(400).json({
+        //         message: error.details[0].message,
+        //     });
+        // }
         const category = await Category.create(req.body);
         if (!category) {
             return res.json({
