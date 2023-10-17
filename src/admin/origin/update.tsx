@@ -5,6 +5,7 @@ import { IOrigin } from "../../models/products";
 import { useForm } from "react-hook-form";
 import { fetchOriginOne, fetchOriginUpdate } from "../../redux/origin.reducer";
 import { useEffect } from "react";
+import {message} from "antd"
 
 const UpdateOrigin = () => {
   const navigate = useNavigate()
@@ -23,6 +24,7 @@ const UpdateOrigin = () => {
     
    
         await dispatch(fetchOriginUpdate(body)).unwrap()
+        message.success({ content: "Cập nhật thành công", key: "update" });
         navigate("/admin/listOri")
       console.log(body);
       

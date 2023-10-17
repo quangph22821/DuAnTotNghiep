@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AppDispatch, RootState } from "../../store";
 import { fetchMaterialAll, fetchMaterialRemove } from "../../redux/material.reducer";
 import { useEffect } from "react";
-
+import { message } from "antd";
 const ListMaterialPage = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { material } = useSelector((state: RootState) => state.material)
@@ -24,6 +24,7 @@ const ListMaterialPage = () => {
     if (tb) {
       await dispatch(fetchMaterialRemove(id)).unwrap()
       await dispatch(fetchMaterialAll()).unwrap()
+      message.success({ content: "Xóa thành công", key: "" });
     }
   }
   return (

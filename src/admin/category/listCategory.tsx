@@ -102,7 +102,7 @@ const ListCategoryPage = () => {
                               <td>{index + 1}</td>
                               <td>{item.name}</td>
                               <td>
-                                <img src={item.img[0]} alt="avatar" />
+                                <img src={item.img[0]} alt="avatar"  className="w-[150px] h-[150px]"/>
                               </td>
                               <td>
                                 <Link to={`/admin/updateCate/${item._id}`}>

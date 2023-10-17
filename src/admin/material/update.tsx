@@ -7,6 +7,7 @@ import {
   fetchMaterialOne,
   fetchMaterialUpdate,
 } from "../../redux/material.reducer";
+import { message } from "antd";
 import { useEffect } from "react";
 
 const UpdateMaterial = () => {
@@ -28,6 +29,7 @@ const UpdateMaterial = () => {
   const onSubmit = async (body: any) => {
     try {
       await dispatch(fetchMaterialUpdate(body)).unwrap();
+      message.success({ content: "Cập nhật thành công", key: "" });
       navigate("/admin/listMate");
       console.log(body);
     } catch (error) {

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../store";
 import { useForm } from "react-hook-form";
 import { fetchMaterialAdd } from "../../redux/material.reducer";
-
+import { message } from "antd";
 const CreateMaterial = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
@@ -13,6 +13,7 @@ const CreateMaterial = () => {
 
     
         await dispatch(fetchMaterialAdd(body)).unwrap()
+        message.success({ content: "Thêm thành công", key: "add" });
         navigate("/admin/listMate")
       console.log(body);
       

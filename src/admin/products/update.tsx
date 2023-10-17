@@ -7,32 +7,39 @@ import { AppDispatch, RootState } from "../../store";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { IProducts } from "../../models/products";
+import { fetchMaterialAll } from "../../redux/material.reducer";
+import { fetchOriginAll } from "../../redux/origin.reducer";
+import { fetchCategoriesAll } from "../../redux/categories.reducer";
 
 const UpdateProducts = () => {
   const navigate = useNavigate()
-  const {id} = useParams()
+  const { id } = useParams()
   console.log(id);
   const dispatch = useDispatch<AppDispatch>()
-  const {register,handleSubmit,formState:{errors}} = useForm<IProducts>({
+  const { material } = useSelector((state: RootState) => state.material)
+  const { category } = useSelector((state: RootState) => state.categories)
+  const { origin } = useSelector((state: RootState) => state.origin)
+  const { register, handleSubmit, formState: { errors } } = useForm<IProducts>({
     defaultValues: async () => {
       if (id) {
         return await fetchProductById(id)
       }
     }
   })
-  const onSubmit = async (body:any) => {
+  const onSubmit = async (body: any) => {
     try {
       const images = await uploadFiles(body.img);
-        const newData = { ...body, img: images };
-        await dispatch(fetchProductsUpdate(newData)).unwrap()
-        navigate("/admin/listPro")
+      const newData = { ...body, img: images };
+      await dispatch(fetchProductsUpdate(newData)).unwrap()
+      message.success({ content: "Cập nhật thành công", key: "update" });
+      navigate("/admin/listPro")
       console.log(body);
-      
+
     } catch (error) { /* empty */ }
   }
 
   const fetchProductById = async (id: string) => {
-    const data  = await dispatch (fetchProductsOne(id)).unwrap()
+    const data = await dispatch(fetchProductsOne(id)).unwrap()
     return data.product
 
   }
@@ -40,6 +47,30 @@ const UpdateProducts = () => {
     if (id) {
       fetchProductById(id)
     }
+    ////////////////////////
+    //category
+    const fetchCategories = async () => {
+      try {
+        await dispatch(fetchCategoriesAll()).unwrap();
+      } catch (error) { }
+    };
+    //material
+    const fetchMaterial = async () => {
+      try {
+        await dispatch(fetchMaterialAll()).unwrap()
+      } catch (error) { /* empty */ }
+    }
+    //origin
+    const fetchOrigin = async () => {
+      try {
+        await dispatch(fetchOriginAll()).unwrap()
+      } catch (error) { /* empty */ }
+    }
+
+    fetchCategories()
+    fetchMaterial()
+    fetchOrigin()
+
   }, [])
   const uploadFiles = async (files: FileList): Promise<string[]> => {
     const CLOUD_NAME = "djhzlcf7o";
@@ -53,22 +84,22 @@ const UpdateProducts = () => {
     formData.append("folder", FOLDER_NAME);
 
     for (const file of Array.from(files)) {
-        formData.append("file", file);
-        try {
-            message.loading({ content: 'Đang tải ảnh lên...', key: 'upload' });
-            const response = await axios.post(api, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-            urls.push(response.data.secure_url);
-        } catch (error) {
-            console.log(error);
-            message.error({ content: 'Lỗi khi tải ảnh lên', key: 'upload' });
-        }
+      formData.append("file", file);
+      try {
+        message.loading({ content: 'Đang cập nhật...', key: 'upload' });
+        const response = await axios.post(api, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
+        urls.push(response.data.secure_url);
+      } catch (error) {
+        console.log(error);
+        message.error({ content: 'Lỗi khi tải ảnh lên', key: 'upload' });
+      }
     }
     return urls;
-};
+  };
 
   return (
     <>
@@ -149,29 +180,37 @@ const UpdateProducts = () => {
                         <div className="form-row">
                           <div className="form-group col-md-4">
                             <label htmlFor="inputState">Chất liệu</label>
-                            <select id="inputState5" className="form-control"   {...register('material_Id')}>
-                              <option>Choose...</option>
-                              <option>Sắt</option>
-                              <option>Sắt</option>
-                              <option>Sắt</option>
+                            <select id="inputState5" className="form-control"   {...register('materialId')}>
+                              
+                              {material.map((item) => {
+                                return (
+                                  <option value={item._id}>{item.name}</option>
+                                )
+
+                              })}
                             </select>
                           </div>
                           <div className="form-group col-md-4">
                             <label htmlFor="inputState">Xuất xứ</label>
-                            <select id="inputState5" className="form-control"   {...register('origin_Id')}>
-                              <option>Choose...</option>
-                              <option>Sắt</option>
-                              <option>Sắt</option>
-                              <option>Sắt</option>
+                            <select id="inputState5" className="form-control"   {...register('originId')}>
+                              
+                              {origin.map((item) => {
+                                return (
+                                  <option value={item._id}>{item?.name}</option>
+                                )
+
+                              })}
                             </select>
                           </div>
                           <div className="form-group col-md-4">
                             <label htmlFor="inputState">Danh mục</label>
-                            <select id="inputState5" className="form-control"   {...register('category_Id')}>
-                              <option>Choose...</option>
-                              <option>Sắt</option>
-                              <option>Sắt</option>
-                              <option>Sắt</option>
+                            <select id="inputState5" className="form-control" {...register('categoryId')}>
+                              {category.map((item) => {
+                                return (
+                                  <option value={item._id}>{item.name}</option>
+                                )
+
+                              })}
                             </select>
                           </div>
                         </div>

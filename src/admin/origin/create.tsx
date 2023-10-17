@@ -4,19 +4,22 @@ import { AppDispatch } from "../../store";
 import { useForm } from "react-hook-form";
 import { fetchOriginAdd } from "../../redux/origin.reducer";
 import { IOrigin } from "../../models/products";
+import { message } from "antd";
 
 const CreateOrigin = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
-  const {register,handleSubmit,formState:{errors}} = useForm<IOrigin>()
-  const onSubmit = async (body:any) => {
+  const { register, handleSubmit, formState: { errors } } = useForm<IOrigin>()
+  const onSubmit = async (body: any) => {
     try {
 
-    
-        await dispatch(fetchOriginAdd(body)).unwrap()
-        navigate("/admin/listOri")
+  
+      await dispatch(fetchOriginAdd(body)).unwrap()
+      message.success({ content: "Thêm thành công", key: "add" });
+
+      navigate("/admin/listOri")
       console.log(body);
-      
+
     } catch (error) { /* empty */ }
   }
   return (
@@ -45,7 +48,7 @@ const CreateOrigin = () => {
                           </div>
                         </div>
                         <button
-                          type="submit"onClick={handleSubmit(onSubmit)}
+                          type="submit" onClick={handleSubmit(onSubmit)}
                           className="btn btn-success bg-green-600 color-while mx-3"
                         >
                           Create

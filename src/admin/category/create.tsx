@@ -39,7 +39,7 @@ const CreateCategory = () => {
     for (const file of Array.from(files)) {
       formData.append("file", file);
       try {
-        message.loading({ content: "Đang tải ảnh lên...", key: "upload" });
+        message.loading({ content: "Đang tải dữ liệu", key: "upload" });
         const response = await axios.post(api, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
