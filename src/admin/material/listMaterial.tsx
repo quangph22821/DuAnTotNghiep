@@ -1,6 +1,32 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { AppDispatch, RootState } from "../../store";
+import { fetchMaterialAll, fetchMaterialRemove } from "../../redux/material.reducer";
+import { useEffect } from "react";
+import { message } from "antd";
 const ListMaterialPage = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { material } = useSelector((state: RootState) => state.material)
+  const fetchMaterial = async () => {
+    try {
+      await dispatch(fetchMaterialAll()).unwrap()
+    } catch (error) { /* empty */ }
+  }
+  console.log(material);
+
+  useEffect(() => {
+    fetchMaterial()
+  }, [])
+
+  const checkDelete = async (id: string) => {
+
+    const tb = window.confirm("Are you sure you want to delete")
+    if (tb) {
+      await dispatch(fetchMaterialRemove(id)).unwrap()
+      await dispatch(fetchMaterialAll()).unwrap()
+      message.success({ content: "Xóa thành công", key: "" });
+    }
+  }
   return (
     <>
       <main role="main" className="main-content">
@@ -10,7 +36,7 @@ const ListMaterialPage = () => {
               <div className="row">
                 {/* Striped rows */}
                 <div className="col-md-12 my-4">
-                  <h2 className="h4 mb-1">Category</h2>
+                  <h2 className="h4 mb-1">Material</h2>
                   <p className="mb-4">
                     Customized table based on Bootstrap with additional elements
                     and more functions
@@ -66,70 +92,21 @@ const ListMaterialPage = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <Link to="/admin/updateMate">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <Link to="">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <Link to="">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>1</td>
-                            <td>4574</td>
-                            <td>
-                              <Link to="">
-                                <span className="badge badge-warning mx-2">
-                                  Update
-                                </span>
-                              </Link>
-                              <button>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
+                     {material.map((item,index)=>(
+                           <tr>
+                           <td>{index+1}</td>
+                           <td>{item.name}</td>
+                           <td>
+                             <Link to={`/admin/updateMate/${item._id}`}>
+                               <span className="badge badge-warning mx-2">
+                                 Update
+                               </span>
+                             </Link>
+                             <button><span className="badge badge-danger" onClick={()=>checkDelete(item._id)}>Delete</span></button>
+                           </td>
+                         </tr>
+                       
+                     ))}
                         </tbody>
                       </table>
                       <nav

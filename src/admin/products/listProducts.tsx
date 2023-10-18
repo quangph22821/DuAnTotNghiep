@@ -13,9 +13,7 @@ const ListProductsPage = () => {
   const fetchProducts = async () => {
     try {
       await dispatch(fetchProductsAll()).unwrap()
-    } catch (error) {
-
-    }
+    } catch (error) { /* empty */ }
   }
   console.log(product);
 
@@ -111,7 +109,7 @@ const ListProductsPage = () => {
                               <td>{item.height} cm</td>
                               <td>{item.weight} kg</td>
                               <td>{item.description}</td>
-                              <td><img src={item.img[0]} alt="" className="w-[150px] h-[200px]"/></td>
+                              <td><img src={item.img[0]} alt="" className="w-[150px] h-[150px]"/></td>
                               <td>
                                 <Link to={`/admin/updatePro/${item._id}`}><span className="badge badge-warning">Update</span></Link>
                                 <button><span className="badge badge-danger" onClick={()=>checkDelete(item._id)}>Delete</span></button>

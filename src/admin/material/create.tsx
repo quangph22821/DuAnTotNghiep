@@ -1,4 +1,24 @@
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { AppDispatch } from "../../store";
+import { useForm } from "react-hook-form";
+import { fetchMaterialAdd } from "../../redux/material.reducer";
+import { message } from "antd";
 const CreateMaterial = () => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>()
+  const {register,handleSubmit,formState:{errors}} = useForm()
+  const onSubmit = async (body:any) => {
+    try {
+
+    
+        await dispatch(fetchMaterialAdd(body)).unwrap()
+        message.success({ content: "Thêm thành công", key: "add" });
+        navigate("/admin/listMate")
+      console.log(body);
+      
+    } catch (error) { /* empty */ }
+  }
     return (
       <>
         <main role="main" className="main-content">
@@ -20,11 +40,12 @@ const CreateMaterial = () => {
                                 type="text"
                                 className="form-control"
                                 id="inputEmail5"
+                                {...register("name")}
                               />
                             </div>
                           </div>
                           <button
-                            type="submit"
+                            type="submit"onClick={handleSubmit(onSubmit)}
                             className="btn btn-success bg-green-600 color-while mx-3"
                           >
                             Create

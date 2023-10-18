@@ -1,4 +1,36 @@
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { AppDispatch } from "../store";
+import { fetchProductsOne } from "../redux/products.reducer";
+import { useEffect, useState } from "react";
+import { IProducts } from "../models/products";
 const DetailPage = () => {
+  const navigate = useNavigate()
+  const { _id }: any = useParams()
+  console.log(_id);
+  const dispatch = useDispatch<AppDispatch>()
+
+  const [products, setproducts] = useState<IProducts>({} as IProducts)
+  const fetchProductById = async (_id: string) => {
+    const { product } = await dispatch(fetchProductsOne(_id)).unwrap()
+    //   console.log(product);
+
+    setproducts(product)
+    // console.log(products);
+  }
+  useEffect(() => {
+    fetchProductById(_id)
+ 
+  }, [])
+
+
+  // nhấp ảnh nhỏ ra ảnh lớn bên trên, dùng onclick của trong img vừa đổ
+  const disImages=(u)=>{
+    const mainImg= document.getElementById('Img')
+    mainImg.src= u
+  }
+  console.log(products);
+
   return (
     <>
       {/* breadcrumb */}
@@ -16,41 +48,41 @@ const DetailPage = () => {
       <div className="container grid grid-cols-2 gap-6">
         <div>
           <img
-            src="../../../src/assets/images/products/product1.jpg"
+            src={products.img?.[0]}
             alt="product"
             className="w-full"
+            id="Img"
           />
           <div className="grid grid-cols-5 gap-4 mt-4">
             <img
-              src="../../../src/assets/images/products/product2.jpg"
+              src={products.img?.[1]}
               alt="product2"
-              className="w-full cursor-pointer border border-primary"
+              className="w-full cursor-pointer border w-[100%]"
+              onClick={()=>disImages(products.img?.[1])}
             />
             <img
-              src="../../../src/assets/images/products/product3.jpg"
+              src={products.img?.[2]}
               alt="product2"
-              className="w-full cursor-pointer border"
+              className="w-full cursor-pointer border w-[100%]"
+              onClick={()=>disImages(products.img?.[2])}
             />
-            <img
-              src="../../../src/assets/images/products/product4.jpg"
+              <img
+              src={products.img?.[3]}
               alt="product2"
-              className="w-full cursor-pointer border"
+              className="w-full cursor-pointer border w-[100%]"
+              onClick={()=>disImages(products.img?.[3])}
             />
-            <img
-              src="../../../src/assets/images/products/product5.jpg"
+           <img
+              src={products.img?.[4]}
               alt="product2"
-              className="w-full cursor-pointer border"
-            />
-            <img
-              src="../../../src/assets/images/products/product6.jpg"
-              alt="product2"
-              className="w-full cursor-pointer border"
+              className="w-full cursor-pointer border w-[100%]"
+              onClick={()=>disImages(products.img?.[4])}
             />
           </div>
         </div>
         <div>
           <h2 className="text-3xl font-medium uppercase mb-2">
-            Italian L Shape Sofa
+            {products.name}
           </h2>
           <div className="flex items-center mb-4">
             <div className="flex gap-1 text-sm text-yellow-400">
@@ -83,7 +115,7 @@ const DetailPage = () => {
             </p>
             <p className="space-x-2">
               <span className="text-gray-800 font-semibold">Category: </span>
-              <span className="text-gray-600">Sofa</span>
+              <span className="text-gray-600">{products.categoryId?.name}</span>
             </p>
             <p className="space-x-2">
               <span className="text-gray-800 font-semibold">SKU: </span>
@@ -91,15 +123,12 @@ const DetailPage = () => {
             </p>
           </div>
           <div className="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
-            <p className="text-xl text-primary font-semibold">$45.00</p>
-            <p className="text-base text-gray-400 line-through">$55.00</p>
+            <p className="text-xl text-primary font-semibold">{products.price}K</p>
+            {/* <p className="text-base text-gray-400 line-through">$55.00</p> */}
           </div>
-          <p className="mt-4 text-gray-600">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos eius
-            eum reprehenderit dolore vel mollitia optio consequatur hic
-            asperiores inventore suscipit, velit consequuntur, voluptate
-            doloremque iure necessitatibus adipisci magnam porro.
-          </p>
+          {/* <p className="mt-4 text-gray-600">
+            {products.description}
+          </p> */}
           <div className="pt-4">
             <h3 className="text-sm text-gray-800 uppercase mb-1">Size</h3>
             <div className="flex items-center gap-2">
@@ -229,28 +258,14 @@ const DetailPage = () => {
       {/* description */}
       <div className="container pb-16">
         <h3 className="border-b border-gray-200 font-roboto text-gray-800 pb-3 font-medium">
-          Product details
+          {products.name}
         </h3>
         <div className="w-3/5 pt-6">
           <div className="text-gray-600">
             <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tenetur
-              necessitatibus deleniti natus dolore cum maiores suscipit optio
-              itaque voluptatibus veritatis tempora iste facilis non aut
-              sapiente dolor quisquam, ex ab.
+          {products.description}
             </p>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum,
-              quae accusantium voluptatem blanditiis sapiente voluptatum. Autem
-              ab, dolorum assumenda earum veniam eius illo fugiat possimus illum
-              dolor totam, ducimus excepturi.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Error
-              quia modi ut expedita! Iure molestiae labore cumque nobis quasi
-              fuga, quibusdam rem? Temporibus consectetur corrupti rerum
-              veritatis numquam labore amet.
-            </p>
+           
           </div>
           <table className="table-auto border-collapse w-full text-left text-gray-600 text-sm mt-6">
             <tbody>
@@ -264,15 +279,15 @@ const DetailPage = () => {
               </tr>
               <tr>
                 <th className="py-2 px-4 border border-gray-300 w-40 font-medium">
-                  Material
+                  height
                 </th>
-                <th className="py-2 px-4 border border-gray-300 ">Latex</th>
+                <th className="py-2 px-4 border border-gray-300 ">{products.height}cm</th>
               </tr>
               <tr>
                 <th className="py-2 px-4 border border-gray-300 w-40 font-medium">
                   Weight
                 </th>
-                <th className="py-2 px-4 border border-gray-300 ">55kg</th>
+                <th className="py-2 px-4 border border-gray-300 ">{products.weight} kg</th>
               </tr>
             </tbody>
           </table>

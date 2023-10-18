@@ -14,9 +14,7 @@ export const fetchProductsAll = createAsyncThunk("produtcs/fetchProductsAll", as
         const { data } = await getAll()
         return data.product
         
-    } catch (error) {
-
-    }
+    } catch (error) { /* empty */ }
 })
 
 
@@ -25,9 +23,7 @@ export const fetchProductsOne = createAsyncThunk("produtcs/fetchProductsOne", as
     try {
         const response = await getOne(id)
         return response.data
-    } catch (error) {
-
-    }
+    } catch (error) { /* empty */ }
 })
 
 //Add
@@ -35,9 +31,7 @@ export const fetchProductsAdd = createAsyncThunk("produtcs/fetchProductsAdd", as
     try {
         const response = await add(body)
         return response.data
-    } catch (error) {
-
-    }
+    } catch (error) { /* empty */ }
 })
 
 //Delete
@@ -45,9 +39,7 @@ export const fetchProductsRemove = createAsyncThunk("produtcs/fetchProductsRemov
     try {
         const response = await remove(id)
         return response.data
-    } catch (error) {
-
-    }
+    } catch (error) { /* empty */ }
 })
 
 //update
@@ -56,9 +48,7 @@ export const fetchProductsUpdate = createAsyncThunk("produtcs/fetchProductsUpdat
     try {
         const response = await update(body)
         return response.data
-    } catch (error) {
-
-    }
+    } catch (error) { /* empty */ }
 })
 
 

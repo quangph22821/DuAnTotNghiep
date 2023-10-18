@@ -24,7 +24,7 @@ import UpdateProducts from "./admin/products/update";
 import ListOriginPage from "./admin/origin/listOrigin";
 import CreateOrigin from "./admin/origin/create";
 import UpdateOrigin from "./admin/origin/update";
-import ListMaterialPage from "./admin/material/listOrigin";
+import ListMaterialPage from "./admin/material/listMaterial";
 import CreateMaterial from "./admin/material/create";
 import UpdateMaterial from "./admin/material/update";
 
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
     element: <UserLayout />,
     children: [
       { path: "/", element: <HomePage /> },
-      { path: "/detail", element: <DetailPage /> },
+      { path: "/detail/:_id", element: <DetailPage /> },
       { path: "/shop", element: <ShopPage /> },
       { path: "/cart", element: <CartPage /> },
       { path: "/contact", element: <ContactPage /> },
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
       // Category
       { path: "/admin/listCate", element: <ListCategoryPage /> },
       { path: "/admin/createCate", element: <CreateCategory /> },
-      { path: "/admin/updateCate", element: <UpdateCategory /> },
+      { path: "/admin/updateCate/:id", element: <UpdateCategory /> },
 
       // Origin
       { path: "/admin/listOri", element: <ListOriginPage /> },

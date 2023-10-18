@@ -6,9 +6,9 @@ export interface IProducts{
     description:string
     height:number,
     weight:number,
-    origin_Id:IOrigin,
-    material_Id:IMaterial,
-    category_Id:ICategory
+    originId:IOrigin,
+    materialId:IMaterial,
+    categoryId:ICategory
 }
 
 export interface ICategory{
