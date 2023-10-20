@@ -9,9 +9,9 @@ router.get("/", (req, res) => {
 })
 router.get("/products", getAll)
 router.get("/products/:id", getId)
-router.post("/products", postProduct)
-router.put("/products/:id", putProduct)
-router.delete("/products/:id", deleteProduct)
+router.post("/products",checkPermission, postProduct)
+router.put("/products/:id",checkPermission, putProduct)
+router.delete("/products/:id",checkPermission, deleteProduct)
 
 
 export default router;
