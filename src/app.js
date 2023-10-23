@@ -5,6 +5,7 @@ import categoryRouter from "./routes/category";
 import cartRouter from "./routes/cart";
 import materialRouter from "./routes/material";
 import originRouter from "./routes/origin";
+import userRouter from "./routes/user";
 import mongoose from "mongoose";
 import cors from "cors"
 
@@ -21,6 +22,7 @@ app.use("", authRouter);
 app.use("", cartRouter);
 app.use("", materialRouter);
 app.use("", originRouter);
+app.use("", userRouter);
 
 
 mongoose.connect("mongodb://127.0.0.1:27017/duantotnghiep");
