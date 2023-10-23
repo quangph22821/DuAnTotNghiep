@@ -1,4 +1,4 @@
-import { IOrigin } from './../models/products';
+import { IOrigin } from './../models/origin';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { add, getAll, getOne, remove, update } from "../api/origin";

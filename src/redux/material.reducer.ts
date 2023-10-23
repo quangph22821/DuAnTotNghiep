@@ -1,4 +1,4 @@
-import { IMaterial } from './../models/products';
+import { IMaterial } from './../models/material';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { add, getAll, getOne, remove, update } from "../api/material";

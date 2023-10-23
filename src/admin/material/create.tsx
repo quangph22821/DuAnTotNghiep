@@ -10,8 +10,6 @@ const CreateMaterial = () => {
   const {register,handleSubmit,formState:{errors}} = useForm()
   const onSubmit = async (body:any) => {
     try {
-
-    
         await dispatch(fetchMaterialAdd(body)).unwrap()
         message.success({ content: "Thêm thành công", key: "add" });
         navigate("/admin/listMate")

@@ -1,3 +1,7 @@
+import { ICategory } from "./category"
+import { IMaterial } from "./material"
+import { IOrigin } from "./origin"
+
 export interface IProducts{
     _id:string,
     name:string,
@@ -11,21 +15,9 @@ export interface IProducts{
     categoryId:ICategory
 }
 
-export interface ICategory{
-    _id:string,
-    name:string,
-    img:string
-}
 
-export interface IOrigin{
-    _id:string,
-    name:string,
-  
-}
 
-export interface IMaterial{
-    _id:string,
-    name:string,
-  
-}
+
+
+
 

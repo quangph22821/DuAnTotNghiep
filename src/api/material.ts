@@ -1,5 +1,5 @@
 import instance from "."
-import {  IMaterial} from "../models/products"
+import {  IMaterial} from "../models/material"
 
 export const getAll = ()=>{
     return instance.get("material")

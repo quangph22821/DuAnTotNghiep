@@ -1,6 +1,34 @@
 import { Link } from "react-router-dom";
+import { AppDispatch, RootState } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsersAll, fetchUsersRemove } from "../../redux/user.reducer";
+import { useEffect } from "react";
+import { message } from "antd";
 
 const ListUsersPage = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { user } = useSelector((state: RootState) => state.users);
+  const fetchMaterial = async () => {
+    try {
+      await dispatch(fetchUsersAll()).unwrap();
+    } catch (error) {
+      /* empty */
+    }
+  };
+  console.log(user);
+
+  useEffect(() => {
+    fetchMaterial();
+  }, []);
+
+  const checkDelete = async (id: string) => {
+    const tb = window.confirm("Are you sure you want to delete");
+    if (tb) {
+      await dispatch(fetchUsersRemove(id)).unwrap();
+      await dispatch(fetchUsersAll()).unwrap();
+      message.success({ content: "Xóa thành công", key: "" });
+    }
+  };
   return (
     <main role="main" className="main-content">
       <div className="container-fluid">
@@ -43,56 +71,61 @@ const ListUsersPage = () => {
                           <th>Email</th>
                           <th>Contact</th>
                           <th>Address</th>
-                          <th>Date</th>
+                          <th>Role</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>
-                            <div className="avatar avatar-md">
-                              <img
-                                src="../../assets/images/avatars/face-3.jpg"
-                                alt="..."
-                                className="avatar-img rounded-circle"
-                              />
-                            </div>
-                          </td>
-                          <td>
-                            <p className="mb-0 text-muted">
-                              <strong>Brown, Asher D.</strong>
-                            </p>
-                            <small className="mb-0 text-muted">2474</small>
-                          </td>
-                          <td>
-                            <p className="mb-0 text-muted">
-                              Accumsan Consulting
-                            </p>
-                            <small className="mb-0 text-muted">
-                              Ap #331-7123 Lobortis Avenue
-                            </small>
-                          </td>
-                          <td>
-                            <p className="mb-0 text-muted">
-                              <a href="#" className="text-muted">
-                                (958) 421-0798
-                              </a>
-                            </p>
-                            <small className="mb-0 text-muted">Nigeria</small>
-                          </td>
-                          <td className="w-25">
-                            <small className="text-muted">
-                              {" "}
-                              Egestas integer eget aliquet nibh praesent. In hac
-                              habitasse platea dictumst quisque sagittis purus.
-                            </small>
-                          </td>
-                          <td className="text-muted">13/09/2020</td>
-                          <td>
-                              <Link to="/admin/updatePro"><span className="badge badge-warning">Update</span></Link>
-                              <button><span className="badge badge-danger">Delete</span></button>
+                        {user.map((item, index) => (
+                          <tr>
+                            <td>
+                              <div className="avatar avatar-md">
+                                <img
+                                  src="../../assets/images/avatars/face-3.jpg"
+                                  alt="..."
+                                  className="avatar-img rounded-circle"
+                                />
+                              </div>
                             </td>
-                        </tr>
+                            <td>
+                              <p className="mb-0 text-muted">
+                                <strong>{item.name}</strong>
+                              </p>
+                            </td>
+                            <td>
+                              <p className="mb-0 text-muted">{item.email}</p>
+                            </td>
+                            <td>
+                              <p className="mb-0 text-muted">
+                                <a href="#" className="text-muted">
+                                  (958) 421-0798
+                                </a>
+                              </p>
+                              <small className="mb-0 text-muted">Nigeria</small>
+                            </td>
+                            <td className="w-25">
+                              <small className="text-muted">
+                                {" "}
+                                Egestas integer eget aliquet nibh praesent. In
+                                hac habitasse platea dictumst quisque sagittis
+                                purus.
+                              </small>
+                            </td>
+                            <td className="text-muted">{item.role}</td>
+                            <td>
+                              <Link to="/admin/updatePro">
+                                <span className="badge badge-warning me-3">
+                                  Update
+                                </span>
+                              </Link>
+                              <button onClick={() => checkDelete(item._id)}>
+                                <span className="badge badge-danger">
+                                  Delete
+                                </span>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                     <nav aria-label="Table Paging" className="mb-0 text-muted">

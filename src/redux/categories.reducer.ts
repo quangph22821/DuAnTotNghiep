@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ICategory } from "../models/products";
+import { ICategory } from "../models/category";
 import { add, getAll, getOne, remove, update } from "../api/category";
 
 const initalState = {

@@ -1,5 +1,5 @@
 import instance from "."
-import {IOrigin, } from "../models/products"
+import {IOrigin, } from "../models/origin"
 
 export const getAll = () => {
     return instance.get("origin")
