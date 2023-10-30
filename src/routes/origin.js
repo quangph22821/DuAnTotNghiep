@@ -6,8 +6,8 @@ import { checkPermission } from "../middlewares/checkPermission";
 const router = express.Router();
 router.get("/origin", getAll);
 router.get("/origin/:id", get);
-router.post("/origin",checkPermission, create);
-router.delete("/origin/:id",checkPermission,remove);
-router.put("/origin/:id",checkPermission, update);
+router.post("/origin", create);
+router.delete("/origin/:id",remove);
+router.put("/origin/:id", update);
 
 export default router;
