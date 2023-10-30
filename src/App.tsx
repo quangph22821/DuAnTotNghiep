@@ -65,17 +65,12 @@ const router = createBrowserRouter([
       // Origin
       { path: "/admin/listOri", element: <ListOriginPage /> },
       { path: "/admin/createOri", element: <CreateOrigin /> },
-      { path: "/admin/updateOri", element: <UpdateOrigin /> },
+      { path: "/admin/updateOri/:id", element: <UpdateOrigin /> },
 
       // Material
       { path: "/admin/listMate", element: <ListMaterialPage /> },
       { path: "/admin/createMate", element: <CreateMaterial /> },
-      { path: "/admin/updateMate", element: <UpdateMaterial /> },
-
-      // Category
-      { path: "/admin/listCate", element: <ListCategoryPage /> },
-      { path: "/admin/createCate", element: <CreateCategory /> },
-      { path: "/admin/updateCate", element: <UpdateCategory /> },
+      { path: "/admin/updateMate/:id", element: <UpdateMaterial /> },
 
       // Cart
       { path: "/admin/listCart", element: <ListCartPage /> },
