@@ -85,9 +85,14 @@ const router = createBrowserRouter([
       { path: "/admin/createMate", element: <CreateMaterial /> },
       { path: "/admin/updateMate/:id", element: <UpdateMaterial /> },
 
+<<<<<<< HEAD
       // Bill
       { path: "/admin/listBill", element: <ListBillPage /> },
       { path: "/admin/updateBill/:id", element: <UpdateBill /> },
+=======
+      // Cart
+      { path: "/admin/listCart", element: <ListCartPage /> },
+>>>>>>> 6908a60216319fdfdb5067261c813993bb8469c5
 
       // Users
       { path: "/admin/listUser", element: <ListUsersPage /> },
