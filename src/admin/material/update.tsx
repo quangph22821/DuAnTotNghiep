@@ -2,13 +2,13 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppDispatch } from "../../store";
 import { useForm } from "react-hook-form";
-import { IMaterial } from "../../models/products";
 import {
   fetchMaterialOne,
   fetchMaterialUpdate,
 } from "../../redux/material.reducer";
 import { message } from "antd";
 import { useEffect } from "react";
+import { IMaterial } from "../../models/material";
 
 const UpdateMaterial = () => {
   const navigate = useNavigate();
@@ -75,6 +75,7 @@ const UpdateMaterial = () => {
                           type="submit"
                           onClick={handleSubmit(onSubmit)}
                           className="btn btn-success bg-green-600 color-while mx-3"
+                          style={{marginRight: 5}}
                         >
                           Update
                         </button>

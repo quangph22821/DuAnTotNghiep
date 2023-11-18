@@ -1,746 +1,551 @@
-import { useDispatch, useSelector } from "react-redux"
-import { Link } from "react-router-dom"
-import { AppDispatch, RootState } from "../store"
-import { fetchProductsAll } from "../redux/products.reducer"
-import { useEffect } from "react"
-
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { AppDispatch, RootState } from "../store";
+import { fetchProductsAll, fetchProductsOne } from "../redux/products.reducer";
+import { useEffect, useState } from "react";
+import { fetchCategoriesAll } from "../redux/categories.reducer";
+import { fetchAddToCard } from "../redux/cart.reducer";
+import { message } from "antd";
+import { useForm } from "react-hook-form";
+import { IProducts } from "../models/products";
 
 const ShopPage = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { product } = useSelector((state: RootState) => state.products)
+  const { _id }: any = useParams();
+  const dispatch = useDispatch<AppDispatch>();
+  const { product } = useSelector((state: RootState) => state.products);
+  const { category } = useSelector((state: RootState) => state.categories);
+  const { handleSubmit, register, setValue } = useForm();
+
+  const [products, setproducts] = useState<IProducts>({} as IProducts);
+  const fetchProductById = async (_id: string) => {
+    const { product } = await dispatch(fetchProductsOne(_id)).unwrap();
+    //   console.log(product);
+
+    setproducts(product);
+    // console.log(products);
+  };
+
   const fetchProducts = async () => {
     try {
-      await dispatch(fetchProductsAll()).unwrap()
-    } catch (error) {
-
-    }
-  }
+      await dispatch(fetchProductsAll()).unwrap();
+    } catch (error) {}
+  };
   console.log(product);
+  //lấy categories
+  const fetchCategories = async () => {
+    try {
+      await dispatch(fetchCategoriesAll()).unwrap();
+    } catch (error) {}
+  };
 
   useEffect(() => {
-    fetchProducts()
-  }, [])
+    fetchProducts();
+    fetchCategories();
+    fetchProductById(_id);
+  }, []);
+
+  // ADD TO CART
+  useEffect(() => {
+    setValue("productId", products._id); // Đặt giá trị mặc định cho trường 'id'
+  }, [products._id, setValue]);
+
+  const onSubmit = async (body: any) => {
+    try {
+      await dispatch(fetchAddToCard(body)).unwrap();
+      message.success({
+        content: "Bạn đã thêm vào giỏ hàng thành công",
+        key: "add",
+      });
+      console.log("cart", body);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
-      {/* breadcrumb */}
-      <div className="container py-4 flex items-center gap-3">
-        <a href="../index.html" className="text-primary text-base">
-          <i className="fa-solid fa-house" />
-        </a>
-        <span className="text-sm text-gray-400">
-          <i className="fa-solid fa-chevron-right" />
-        </span>
-        <p className="text-gray-600 font-medium">Shop</p>
-      </div>
-      {/* ./breadcrumb */}
-      {/* shop wrapper */}
-      <div className="container grid md:grid-cols-4 grid-cols-2 gap-6 pt-4 pb-16 items-start">
-        {/* sidebar */}
-        {/* drawer init and toggle */}
-        <div className="text-center md:hidden">
-          <button
-            className="text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 block md:hidden"
-            type="button"
-            data-drawer-target="drawer-example"
-            data-drawer-show="drawer-example"
-            aria-controls="drawer-example"
-          >
-            {/* <ion-icon name="grid-outline" /> */}
-          </button>
-        </div>
-        {/* drawer component */}
-        <div
-          id="drawer-example"
-          className="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80 dark:bg-gray-800"
-          tabIndex={-1}
-          aria-labelledby="drawer-label"
-        >
-          <h5
-            id="drawer-label"
-            className="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Info
-          </h5>
-          <button
-            type="button"
-            data-drawer-hide="drawer-example"
-            aria-controls="drawer-example"
-            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          >
-            <svg
-              aria-hidden="true"
-              className="w-5 h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span className="sr-only">Close menu</span>
-          </button>
-          <div className="divide-y divide-gray-200 space-y-5">
-            <div>
-              <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-                Categories
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="cat-1"
-                    id="cat-1"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="cat-1"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Bedroom
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(15)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="cat-2"
-                    id="cat-2"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="cat-2"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Sofa
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(9)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="cat-3"
-                    id="cat-3"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="cat-3"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Office
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(21)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="cat-4"
-                    id="cat-4"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="cat-4"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Outdoor
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(10)</div>
-                </div>
-              </div>
-            </div>
-            <div className="pt-4">
-              <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-                Brands
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="brand-1"
-                    id="brand-1"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="brand-1"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Cooking Color
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(15)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="brand-2"
-                    id="brand-2"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="brand-2"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Magniflex
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(9)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="brand-3"
-                    id="brand-3"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="brand-3"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Ashley
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(21)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="brand-4"
-                    id="brand-4"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="brand-4"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    M&amp;D
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(10)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="brand-5"
-                    id="brand-5"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="brand-5"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Olympic
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(10)</div>
-                </div>
-              </div>
-            </div>
-            <div className="pt-4">
-              <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-                Price
-              </h3>
-              <div className="mt-4 flex items-center">
-                <input
-                  type="text"
-                  name="min"
-                  id="min"
-                  className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                  placeholder="min"
-                />
-                <span className="mx-3 text-gray-500">-</span>
-                <input
-                  type="text"
-                  name="max"
-                  id="max"
-                  className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                  placeholder="max"
-                />
-              </div>
-            </div>
-            <div className="pt-4">
-              <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-                size
-              </h3>
-              <div className="flex items-center gap-2">
-                <div className="size-selector">
-                  <input type="radio" name="size" id="size-xs" className="hidden" />
-                  <label
-                    htmlFor="size-xs"
-                    className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                  >
-                    XS
-                  </label>
-                </div>
-                <div className="size-selector">
-                  <input type="radio" name="size" id="size-sm" className="hidden" />
-                  <label
-                    htmlFor="size-sm"
-                    className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                  >
-                    S
-                  </label>
-                </div>
-                <div className="size-selector">
-                  <input type="radio" name="size" id="size-m" className="hidden" />
-                  <label
-                    htmlFor="size-m"
-                    className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                  >
-                    M
-                  </label>
-                </div>
-                <div className="size-selector">
-                  <input type="radio" name="size" id="size-l" className="hidden" />
-                  <label
-                    htmlFor="size-l"
-                    className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                  >
-                    L
-                  </label>
-                </div>
-                <div className="size-selector">
-                  <input type="radio" name="size" id="size-xl" className="hidden" />
-                  <label
-                    htmlFor="size-xl"
-                    className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                  >
-                    XL
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div className="pt-4">
-              <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-                Color
-              </h3>
-              <div className="flex items-center gap-2">
-                <div className="color-selector">
-                  <input type="radio" name="color" id="red" className="hidden" />
-                  <label
-                    htmlFor="red"
-                    className="border border-gray-200 rounded-sm h-6 w-6  cursor-pointer shadow-sm block"
-                    style={{ backgroundColor: "#fc3d57" }}
-                  />
-                </div>
-                <div className="color-selector">
-                  <input type="radio" name="color" id="black" className="hidden" />
-                  <label
-                    htmlFor="black"
-                    className="border border-gray-200 rounded-sm h-6 w-6  cursor-pointer shadow-sm block"
-                    style={{ backgroundColor: "#000" }}
-                  />
-                </div>
-                <div className="color-selector">
-                  <input type="radio" name="color" id="white" className="hidden" />
-                  <label
-                    htmlFor="white"
-                    className="border border-gray-200 rounded-sm h-6 w-6  cursor-pointer shadow-sm block"
-                    style={{ backgroundColor: "#fff" }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <a
-              href="#"
-              className="px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-            >
-              Learn more
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            >
-              Get access{" "}
-              <svg
-                className="w-4 h-4 ml-2"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </a>
-          </div>
-        </div>
-        {/* ./sidebar */}
-        <div className="col-span-1 bg-white px-4 pb-6 shadow rounded overflow-hiddenb hidden md:block">
-          <div className="divide-y divide-gray-200 space-y-5">
-            <div>
-              <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-                Categories
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="cat-1"
-                    id="cat-1"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="cat-1"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Bedroom
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(15)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="cat-2"
-                    id="cat-2"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="cat-2"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Sofa
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(9)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="cat-3"
-                    id="cat-3"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="cat-3"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Office
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(21)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="cat-4"
-                    id="cat-4"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="cat-4"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Outdoor
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(10)</div>
-                </div>
-              </div>
-            </div>
-            <div className="pt-4">
-              <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-                Brands
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="brand-1"
-                    id="brand-1"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="brand-1"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Cooking Color
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(15)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="brand-2"
-                    id="brand-2"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="brand-2"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Magniflex
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(9)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="brand-3"
-                    id="brand-3"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="brand-3"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Ashley
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(21)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="brand-4"
-                    id="brand-4"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="brand-4"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    M&amp;D
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(10)</div>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="brand-5"
-                    id="brand-5"
-                    className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                  />
-                  <label
-                    htmlFor="brand-5"
-                    className="text-gray-600 ml-3 cusror-pointer"
-                  >
-                    Olympic
-                  </label>
-                  <div className="ml-auto text-gray-600 text-sm">(10)</div>
-                </div>
-              </div>
-            </div>
-            <div className="pt-4">
-              <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-                Price
-              </h3>
-              <div className="mt-4 flex items-center">
-                <input
-                  type="text"
-                  name="min"
-                  id="min"
-                  className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                  placeholder="min"
-                />
-                <span className="mx-3 text-gray-500">-</span>
-                <input
-                  type="text"
-                  name="max"
-                  id="max"
-                  className="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                  placeholder="max"
-                />
-              </div>
-            </div>
-            <div className="pt-4">
-              <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-                size
-              </h3>
-              <div className="flex items-center gap-2">
-                <div className="size-selector">
-                  <input type="radio" name="size" id="size-xs" className="hidden" />
-                  <label
-                    htmlFor="size-xs"
-                    className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                  >
-                    XS
-                  </label>
-                </div>
-                <div className="size-selector">
-                  <input type="radio" name="size" id="size-sm" className="hidden" />
-                  <label
-                    htmlFor="size-sm"
-                    className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                  >
-                    S
-                  </label>
-                </div>
-                <div className="size-selector">
-                  <input type="radio" name="size" id="size-m" className="hidden" />
-                  <label
-                    htmlFor="size-m"
-                    className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                  >
-                    M
-                  </label>
-                </div>
-                <div className="size-selector">
-                  <input type="radio" name="size" id="size-l" className="hidden" />
-                  <label
-                    htmlFor="size-l"
-                    className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                  >
-                    L
-                  </label>
-                </div>
-                <div className="size-selector">
-                  <input type="radio" name="size" id="size-xl" className="hidden" />
-                  <label
-                    htmlFor="size-xl"
-                    className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                  >
-                    XL
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div className="pt-4">
-              <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-                Color
-              </h3>
-              <div className="flex items-center gap-2">
-                <div className="color-selector">
-                  <input type="radio" name="color" id="red" className="hidden" />
-                  <label
-                    htmlFor="red"
-                    className="border border-gray-200 rounded-sm h-6 w-6  cursor-pointer shadow-sm block"
-                    style={{ backgroundColor: "#fc3d57" }}
-                  />
-                </div>
-                <div className="color-selector">
-                  <input type="radio" name="color" id="black" className="hidden" />
-                  <label
-                    htmlFor="black"
-                    className="border border-gray-200 rounded-sm h-6 w-6  cursor-pointer shadow-sm block"
-                    style={{ backgroundColor: "#000" }}
-                  />
-                </div>
-                <div className="color-selector">
-                  <input type="radio" name="color" id="white" className="hidden" />
-                  <label
-                    htmlFor="white"
-                    className="border border-gray-200 rounded-sm h-6 w-6  cursor-pointer shadow-sm block"
-                    style={{ backgroundColor: "#fff" }}
-                  />
-                </div>
-              </div>
+      {/* catg header banner section */}
+      <section id="aa-catg-head-banner">
+        <img
+          src="../../src/assets/img/banner_dragon_ball_00000_05cb195981c248dd9de71a0e727e7b6a.jpg"
+          alt=""
+          style={{ width: "100%", height: "300px" }}
+        />
+        <div className="aa-catg-head-banner-area">
+          <div className="container">
+            <div className="aa-catg-head-banner-content">
+              <h2>Fashion</h2>
+              <ol className="breadcrumb">
+                <li>
+                  <a href="index.html">Home</a>
+                </li>
+                <li className="active">Women</li>
+              </ol>
             </div>
           </div>
         </div>
-        {/* products */}
-        <div className="col-span-3">
-          <div className="flex items-center mb-4">
-            <select
-              name="sort"
-              id="sort"
-              className="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary"
-            >
-              <option value="">Default sorting</option>
-              <option value="price-low-to-high">Price low to high</option>
-              <option value="price-high-to-low">Price high to low</option>
-              <option value="latest">Latest product</option>
-            </select>
-            <div className="flex gap-2 ml-auto">
-              <div className="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
-                <i className="fa-solid fa-grip-vertical" />
-              </div>
-              <div className="border border-gray-300 w-10 h-9 flex items-center justify-center text-gray-600 rounded cursor-pointer">
-                <i className="fa-solid fa-list" />
-              </div>
-            </div>
-          </div>
-          <div className="grid md:grid-cols-3 grid-cols-2 gap-6">
-            {product.slice(0,6).map((item) => (
-
-              <div className="bg-white shadow rounded overflow-hidden group">
-               <Link to={`/detail/${item._id}`}>
-               <div className="relative">
-                  <img
-                    src={item.img[0]}
-                    alt="product 1"
-                    className="w-full h-[250px]"
-                  />
-                  <div
-                    className="absolute inset-0 bg-black bg-opacity-40 flex items-center 
-        justify-center gap-2 opacity-0 group-hover:opacity-100 transition"
-                  >
-                    <Link
-                      to="/detail"
-                      className="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
-                      title="view product"
-                    >
-                      <i className="fa-solid fa-magnifying-glass" />
-                    </Link>
-                    <a
-                      href="#"
-                      className="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
-                      title="add to wishlist"
-                    >
-                      <i className="fa-solid fa-heart" />
+      </section>
+      {/* / catg header banner section */}
+      {/* product category */}
+      <section id="aa-product-category">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-9 col-md-9 col-sm-8 col-md-push-3">
+              <div className="aa-product-catg-content">
+                <div className="aa-product-catg-head">
+                  <div className="aa-product-catg-head-left">
+                    <form action="" className="aa-sort-form">
+                      <label htmlFor="">Sort by</label>
+                      <select name="">
+                        <option value={1}>Default</option>
+                        <option value={2}>Name</option>
+                        <option value={3}>Price</option>
+                        <option value={4}>Date</option>
+                      </select>
+                    </form>
+                    <form action="" className="aa-show-form">
+                      <label htmlFor="">Show</label>
+                      <select name="">
+                        <option value={1}>12</option>
+                        <option value={2}>24</option>
+                        <option value={3}>36</option>
+                      </select>
+                    </form>
+                  </div>
+                  <div className="aa-product-catg-head-right">
+                    <a id="grid-catg" href="#">
+                      <span className="fa fa-th" />
+                    </a>
+                    <a id="list-catg" href="#">
+                      <span className="fa fa-list" />
                     </a>
                   </div>
                 </div>
-               </Link>
-                <div className="pt-4 pb-3 px-4">
-                  <a href="#">
-                    <h4 className="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
-                      {item.name}
-                    </h4>
-                  </a>
-                  <div className="flex items-baseline mb-1 space-x-2">
-                    <p className="text-xl text-primary font-semibold">{item.price}</p>
-                    {/* <p className="text-sm text-gray-400 line-through">$55.90</p> */}
-                  </div>
-                  <div className="flex items-center">
-                    <div className="flex gap-1 text-sm text-yellow-400">
-                      <span>
-                        <i className="fa-solid fa-star" />
-                      </span>
-                      <span>
-                        <i className="fa-solid fa-star" />
-                      </span>
-                      <span>
-                        <i className="fa-solid fa-star" />
-                      </span>
-                      <span>
-                        <i className="fa-solid fa-star" />
-                      </span>
-                      <span>
-                        <i className="fa-solid fa-star" />
-                      </span>
+                <div className="aa-product-catg-body">
+                  <ul className="aa-product-catg row">
+                    {/* start single product item */}
+                    {product.map((item) => (
+                      <li className="col">
+                        <input type="hidden" {...register("productId")} />
+                        <figure>
+                          <a className="aa-product-img" href="#">
+                            <img
+                              src={item.img[0]}
+                              alt=""
+                              style={{ width: 250, height: 300 }}
+                            />
+                          </a>
+                          <button
+                            className="aa-add-card-btn"
+                            onClick={handleSubmit(onSubmit)}
+                          >
+                            <span className="fa fa-shopping-cart" />
+                            Add To Cart
+                          </button>
+                          <figcaption>
+                            <h4 className="aa-product-title">
+                            <Link to={`/detail/${item._id}`}>{item.name}</Link>
+                            </h4>
+                            <span className="aa-product-price">{item.price}</span>
+                            <span className="aa-product-price">
+                              <del>$65.50</del>
+                            </span>
+                            <p className="aa-product-descrip">
+                              Lorem ipsum dolor sit amet, consectetur
+                              adipisicing elit. Numquam accusamus facere iusto,
+                              autem soluta amet sapiente ratione inventore
+                              nesciunt a, maxime quasi consectetur, rerum illum.
+                            </p>
+                          </figcaption>
+                        </figure>
+                        <div className="aa-product-hvr-content">
+                          <a
+                            href="#"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Add to Wishlist"
+                          >
+                            <span className="fa fa-heart-o" />
+                          </a>
+                          <Link
+                            to={`/detail/${item._id}`}
+                            data-toggle2="tooltip"
+                            data-placement="top"
+                            title="Quick View"
+                            data-toggle="modal"
+                            // data-target="#quick-view-modal"
+                          >
+                            <span className="fa fa-search" />
+                          </Link>
+                        </div>
+                        {/* product badge */}
+                        <span className="aa-badge aa-sale">SALE!</span>
+                      </li>
+                    ))}
+                    {/* start single product item */}
+                  </ul>
+                  {/* quick view modal */}
+                  <div
+                    className="modal fade"
+                    id="quick-view-modal"
+                    tabIndex={-1}
+                    role="dialog"
+                    aria-labelledby="myModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div className="modal-dialog">
+                      <div className="modal-content">
+                        <div className="modal-body">
+                          <button
+                            type="button"
+                            className="close"
+                            data-dismiss="modal"
+                            aria-hidden="true"
+                          >
+                            ×
+                          </button>
+                          <div className="row">
+                            {/* Modal view slider */}
+                            <div className="col-md-6 col-sm-6 col-xs-12">
+                              <div className="aa-product-view-slider">
+                                <div
+                                  className="simpleLens-gallery-container"
+                                  id="demo-1"
+                                >
+                                  <div className="simpleLens-container">
+                                    <div className="simpleLens-big-image-container">
+                                      <a
+                                        className="simpleLens-lens-image"
+                                        data-lens-image="img/view-slider/large/polo-shirt-1.png"
+                                      >
+                                        <img
+                                          src="img/view-slider/medium/polo-shirt-1.png"
+                                          className="simpleLens-big-image"
+                                        />
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div className="simpleLens-thumbnails-container">
+                                    <a
+                                      href="#"
+                                      className="simpleLens-thumbnail-wrapper"
+                                      data-lens-image="img/view-slider/large/polo-shirt-1.png"
+                                      data-big-image="img/view-slider/medium/polo-shirt-1.png"
+                                    >
+                                      <img src="img/view-slider/thumbnail/polo-shirt-1.png" />
+                                    </a>
+                                    <a
+                                      href="#"
+                                      className="simpleLens-thumbnail-wrapper"
+                                      data-lens-image="img/view-slider/large/polo-shirt-3.png"
+                                      data-big-image="img/view-slider/medium/polo-shirt-3.png"
+                                    >
+                                      <img src="img/view-slider/thumbnail/polo-shirt-3.png" />
+                                    </a>
+                                    <a
+                                      href="#"
+                                      className="simpleLens-thumbnail-wrapper"
+                                      data-lens-image="img/view-slider/large/polo-shirt-4.png"
+                                      data-big-image="img/view-slider/medium/polo-shirt-4.png"
+                                    >
+                                      <img src="img/view-slider/thumbnail/polo-shirt-4.png" />
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            {/* Modal view content */}
+                            <div className="col-md-6 col-sm-6 col-xs-12">
+                              <div className="aa-product-view-content">
+                                <h3>T-Shirt</h3>
+                                <div className="aa-price-block">
+                                  <span className="aa-product-view-price">
+                                    $34.99
+                                  </span>
+                                  <p className="aa-product-avilability">
+                                    Avilability: <span>In stock</span>
+                                  </p>
+                                </div>
+                                <p>
+                                  Lorem ipsum dolor sit amet, consectetur
+                                  adipisicing elit. Officiis animi, veritatis
+                                  quae repudiandae quod nulla porro quidem,
+                                  itaque quis quaerat!
+                                </p>
+                                <h4>Size</h4>
+                                <div className="aa-prod-view-size">
+                                  <a href="#">S</a>
+                                  <a href="#">M</a>
+                                  <a href="#">L</a>
+                                  <a href="#">XL</a>
+                                </div>
+                                <div className="aa-prod-quantity">
+                                  <form action="">
+                                    <select name="" id="">
+                                      <option value={0}>1</option>
+                                      <option value={1}>2</option>
+                                      <option value={2}>3</option>
+                                      <option value={3}>4</option>
+                                      <option value={4}>5</option>
+                                      <option value={5}>6</option>
+                                    </select>
+                                  </form>
+                                  <p className="aa-prod-category">
+                                    Category: <a href="#">Polo T-Shirt</a>
+                                  </p>
+                                </div>
+                                <div className="aa-prod-view-bottom">
+                                  <a href="#" className="aa-add-to-cart-btn">
+                                    <span className="fa fa-shopping-cart" />
+                                    Add To Cart
+                                  </a>
+                                  <a href="#" className="aa-add-to-cart-btn">
+                                    View Details
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* /.modal-content */}
                     </div>
-                    <div className="text-xs text-gray-500 ml-3">(150)</div>
+                    {/* /.modal-dialog */}
+                  </div>
+                  {/* / quick view modal */}
+                </div>
+                <div className="aa-product-catg-pagination">
+                  <nav>
+                    <ul className="pagination">
+                      <li>
+                        <a href="#" aria-label="Previous">
+                          <span aria-hidden="true">«</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">1</a>
+                      </li>
+                      <li>
+                        <a href="#">2</a>
+                      </li>
+                      <li>
+                        <a href="#">3</a>
+                      </li>
+                      <li>
+                        <a href="#">4</a>
+                      </li>
+                      <li>
+                        <a href="#">5</a>
+                      </li>
+                      <li>
+                        <a href="#" aria-label="Next">
+                          <span aria-hidden="true">»</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-3 col-md-3 col-sm-4 col-md-pull-9">
+              <aside className="aa-sidebar">
+                {/* single sidebar */}
+                <div className="aa-sidebar-widget">
+                  <h3>Category</h3>
+                  <ul className="aa-catg-nav">
+                    {category.map((item) => (
+                      <li>
+                        <a href="#">{item.name}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                {/* single sidebar */}
+                <div className="aa-sidebar-widget">
+                  <h3>Tags</h3>
+                  <div className="tag-cloud">
+                    <a href="#">Fashion</a>
+                    <a href="#">Ecommerce</a>
+                    <a href="#">Shop</a>
+                    <a href="#">Hand Bag</a>
+                    <a href="#">Laptop</a>
+                    <a href="#">Head Phone</a>
+                    <a href="#">Pen Drive</a>
                   </div>
                 </div>
-                <a
-                  href="#"
-                  className="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition"
-                >
-                  Add to cart
-                </a>
-              </div>
-
-            ))}
-
+                {/* single sidebar */}
+                <div className="aa-sidebar-widget">
+                  <h3>Shop By Price</h3>
+                  {/* price range */}
+                  <div className="aa-sidebar-price-range">
+                    <form action="">
+                      <div
+                        id="skipstep"
+                        className="noUi-target noUi-ltr noUi-horizontal noUi-background"
+                      ></div>
+                      <span id="skip-value-lower" className="example-val">
+                        30.00
+                      </span>
+                      <span id="skip-value-upper" className="example-val">
+                        100.00
+                      </span>
+                      <button className="aa-filter-btn" type="submit">
+                        Filter
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                {/* single sidebar */}
+                <div className="aa-sidebar-widget">
+                  <h3>Shop By Color</h3>
+                  <div className="aa-color-tag">
+                    <a className="aa-color-green" href="#" />
+                    <a className="aa-color-yellow" href="#" />
+                    <a className="aa-color-pink" href="#" />
+                    <a className="aa-color-purple" href="#" />
+                    <a className="aa-color-blue" href="#" />
+                    <a className="aa-color-orange" href="#" />
+                    <a className="aa-color-gray" href="#" />
+                    <a className="aa-color-black" href="#" />
+                    <a className="aa-color-white" href="#" />
+                    <a className="aa-color-cyan" href="#" />
+                    <a className="aa-color-olive" href="#" />
+                    <a className="aa-color-orchid" href="#" />
+                  </div>
+                </div>
+                {/* single sidebar */}
+                <div className="aa-sidebar-widget">
+                  <h3>Recently Views</h3>
+                  <div className="aa-recently-views">
+                    <ul>
+                      <li>
+                        <a href="#" className="aa-cartbox-img">
+                          <img
+                            src="../../src/assets/img/banner_dragon_ball_00000_05cb195981c248dd9de71a0e727e7b6a.jpg"
+                            alt=""
+                          />
+                        </a>
+                        <div className="aa-cartbox-info">
+                          <h4>
+                            <a href="#">Product Name</a>
+                          </h4>
+                          <p>1 x $250</p>
+                        </div>
+                      </li>
+                      <li>
+                        <a href="#" className="aa-cartbox-img">
+                          <img
+                            src="../../src/assets/img/banner_dragon_ball_00000_05cb195981c248dd9de71a0e727e7b6a.jpg"
+                            alt=""
+                          />
+                        </a>
+                        <div className="aa-cartbox-info">
+                          <h4>
+                            <a href="#">Product Name</a>
+                          </h4>
+                          <p>1 x $250</p>
+                        </div>
+                      </li>
+                      <li>
+                        <a href="#" className="aa-cartbox-img">
+                          <img
+                            src="../../src/assets/img/banner_dragon_ball_00000_05cb195981c248dd9de71a0e727e7b6a.jpg"
+                            alt=""
+                          />
+                        </a>
+                        <div className="aa-cartbox-info">
+                          <h4>
+                            <a href="#">Product Name</a>
+                          </h4>
+                          <p>1 x $250</p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                {/* single sidebar */}
+                <div className="aa-sidebar-widget">
+                  <h3>Top Rated Products</h3>
+                  <div className="aa-recently-views">
+                    <ul>
+                      <li>
+                        <a href="#" className="aa-cartbox-img">
+                          <img
+                            src="../../src/assets/img/banner_dragon_ball_00000_05cb195981c248dd9de71a0e727e7b6a.jpg"
+                            alt=""
+                          />
+                        </a>
+                        <div className="aa-cartbox-info">
+                          <h4>
+                            <a href="#">Product Name</a>
+                          </h4>
+                          <p>1 x $250</p>
+                        </div>
+                      </li>
+                      <li>
+                        <a href="#" className="aa-cartbox-img">
+                          <img
+                            src="../../src/assets/img/banner_dragon_ball_00000_05cb195981c248dd9de71a0e727e7b6a.jpg"
+                            alt=""
+                          />
+                        </a>
+                        <div className="aa-cartbox-info">
+                          <h4>
+                            <a href="#">Product Name</a>
+                          </h4>
+                          <p>1 x $250</p>
+                        </div>
+                      </li>
+                      <li>
+                        <a href="#" className="aa-cartbox-img">
+                          <img
+                            src="../../src/assets/img/banner_dragon_ball_00000_05cb195981c248dd9de71a0e727e7b6a.jpg"
+                            alt=""
+                          />
+                        </a>
+                        <div className="aa-cartbox-info">
+                          <h4>
+                            <a href="#">Product Name</a>
+                          </h4>
+                          <p>1 x $250</p>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </aside>
+            </div>
           </div>
         </div>
-        {/* ./products */}
-      </div>
-      {/* ./shop wrapper */}
+      </section>
+      {/* / product category */}
+      {/* Subscribe section */}
+      <section id="aa-subscribe">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="aa-subscribe-area">
+                <h3>Subscribe our newsletter </h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex,
+                  velit!
+                </p>
+                <form action="" className="aa-subscribe-form">
+                  <input
+                    type="email"
+                    name=""
+                    id=""
+                    placeholder="Enter your Email"
+                  />
+                  <input type="submit" defaultValue="Subscribe" />
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* / Subscribe section */}
     </>
+  );
+};
 
-  )
-}
-
-export default ShopPage
+export default ShopPage;

@@ -1,168 +1,126 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { AppDispatch, RootState } from "../../store";
-import { fetchProductsAll, fetchProductsRemove } from "../../redux/products.reducer";
-import { useEffect } from "react";
+
+import { Button, message, Popconfirm, Space, Table } from 'antd';
+import type { ColumnsType, TableProps } from 'antd/es/table';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { IProducts } from '../../models/products';
+import { RootState } from '../../store';
+import { fetchProductsAll, fetchProductsRemove } from '../../redux/products.reducer';
+
+
+interface ProductData extends IProducts {
+    recordKey: string;
+}
+
+interface DataType {
+    key: string;
+    name: string;
+    price: number;
+    img: string;
+}
 
 
 
 const ListProductsPage = () => {
- 
-  const dispatch = useDispatch<AppDispatch>()
-  const { product } = useSelector((state: RootState) => state.products)
-  const fetchProducts = async () => {
-    try {
-      await dispatch(fetchProductsAll()).unwrap()
-    } catch (error) { /* empty */ }
-  }
-  console.log(product);
 
-  useEffect(() => {
-    fetchProducts()
-  }, [])
+    const {product} = useSelector((state: RootState) => state.products)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(fetchProductsAll())
+    }, [])
+    const datass: IProducts[] = product
+    const confirmDelete = async (id: string) => {
+        try {
+            await dispatch(fetchProductsRemove(id))
+            await dispatch(fetchProductsAll())
+            message.success('Sản phẩm đã được xóa thành công');
 
-  const checkDelete = async (id: string) => {
+        } catch (error) {
+            if (!error) {
+                setTimeout(message.loading('đang sử lí ..'), 2000)
+            } else {
+                message.error(`Lỗi khi xóa sản phẩm này: ${error}`);
+            }
+        }
+    };
 
-    const tb = window.confirm("Are you sure you want to delete")
-    if (tb) {
-      await dispatch(fetchProductsRemove(id)).unwrap()
-      await dispatch(fetchProductsAll()).unwrap()
-    }
 
-  }
+    const cancelDelete = () => {
+        message.error('Hủy thoa tác xóa thành công');
+    };
 
-  return (
-    <>
-      <main role="main" className="main-content">
-        <div className="container-fluid">
-          <div className="row justify-content-center">
-            <div className="col-12">
-              <div className="row">
-                {/* Striped rows */}
-                <div className="col-md-12 my-4">
-                  <h2 className="h4 mb-1">Products</h2>
-                  <p className="mb-4">
-                    Customized table based on Bootstrap with additional elements
-                    and more functions
-                  </p>
-                  <div className="card shadow">
-                    <div className="card-body">
-                      <div className="toolbar row mb-3">
-                        <div className="col">
-                          <form className="form-inline">
-                            <div className="form-row">
-                              <div className="form-group col-auto">
-                                <label className="sr-only">Search</label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  defaultValue=""
-                                  placeholder="Search"
-                                />
-                              </div>
-                              <div className="form-group col-auto ml-3">
-                                <label className="my-1 mr-2 sr-only">
-                                  Status
-                                </label>
-                                <select className="custom-select my-1 mr-sm-2">
-                                  <option>Choose...</option>
-                                  <option value={1}>Processing</option>
-                                  <option value={2}>Success</option>
-                                  <option value={3}>Pending</option>
-                                  <option value={3}>Hold</option>
-                                </select>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                        <div className="col ml-auto">
-                          <div className="dropdown float-right">
-                            <Link
-                              to="/admin/createPro"
-                              className="btn btn-primary float-right ml-3"
-                            >
-                              Add more +
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                      {/* table */}
-                      <table className="table table-bordered">
-                        <thead>
-                          <tr role="row">
-                            <th>STT</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Height</th>
-                            <th>Weight</th>
-                            <th>Description</th>
-                            <th>Image</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {product.map((item, index) => (
-                            <tr>
-                              <td>{index + 1}</td>
-                              <td>{item.name}</td>
-                              <td>{item.price}</td>
-                              <td>{item.height} cm</td>
-                              <td>{item.weight} kg</td>
-                              <td>{item.description}</td>
-                              <td><img src={item.img[0]} alt="" className="w-[150px] h-[150px]"/></td>
-                              <td>
-                                <Link to={`/admin/updatePro/${item._id}`}><span className="badge badge-warning">Update</span></Link>
-                                <button><span className="badge badge-danger" onClick={()=>checkDelete(item._id)}>Delete</span></button>
-                              </td>
-                            </tr>
-                          ))}
+    const uniqueNames = Array.from(new Set(datass?.map((product: any) => product.name)));
+    const nameFilters = uniqueNames.map((name) => ({ text: name, value: name }));
 
-                        </tbody>
-                      </table>
-                      <nav
-                        aria-label="Table Paging"
-                        className="mb-0 text-muted"
-                      >
-                        <ul className="pagination justify-content-end mb-0">
-                          <li className="page-item">
-                            <a className="page-link" href="#">
-                              Previous
-                            </a>
-                          </li>
-                          <li className="page-item">
-                            <a className="page-link" href="#">
-                              1
-                            </a>
-                          </li>
-                          <li className="page-item">
-                            <a className="page-link" href="#">
-                              2
-                            </a>
-                          </li>
-                          <li className="page-item">
-                            <a className="page-link" href="#">
-                              3
-                            </a>
-                          </li>
-                          <li className="page-item">
-                            <a className="page-link" href="#">
-                              Next
-                            </a>
-                          </li>
-                        </ul>
-                      </nav>
-                    </div>
-                  </div>
-                </div>{" "}
-                {/* simple table */}
-              </div>{" "}
-              {/* end section */}
-            </div>
-          </div>
+    const columns: ColumnsType<DataType> = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            width: '30%',
+            filters: nameFilters,
+            onFilter: (value, record) => record.name.indexOf(value.toString()) === 0,
+            sorter: (a, b) => a.name.localeCompare(b.name),
+        },
+        {
+            title: 'Price',
+            dataIndex: 'price',
+            width: '15%',
+            sorter: (a, b) => a.price - b.price,
+        },
+        {
+            title: 'Image',
+            dataIndex: 'img',
+            width: '20%',
+            render: (img) => <img src={img} alt="Product" width={100} height={50} />,
+        },
+        {
+            title: 'Action',
+            dataIndex: '',
+            key: 'x',
+            width: '20%',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Link to={`/admin/updatePro/${record.key}`}>
+                        <Button className='btn-edit text-[#30D200] border-[#31d200cb] hover:text-[#31d200ba] hover:border-[#30D200] active:border-[#30D200]' >Edit</Button>
+                    </Link>
+                    <Popconfirm
+                        title="Bạn có chắc chắn là xóa sản phẩm này?"
+                        onConfirm={() => confirmDelete(record.key)}
+                        onCancel={cancelDelete}
+                        okText="Đồng ý"
+                        cancelText="Không"
+                    >
+                        <Button type="primary" danger>Delete</Button>
+                    </Popconfirm>
+                </Space>
+            ),
+        },
+    ];
+
+    const data: DataType[] = datass?.map((product) => ({
+        key: product._id,
+        name: product.name,
+        price: product.price,
+        img: product.img[0],
+    }));
+
+    const productData: ProductData[] = datass?.map((product) => ({
+        ...product,
+        recordKey: product._id,
+    }));
+    console.log(productData);
+
+    const handleTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
+        console.log('Table parameters:', pagination, filters, sorter, extra);
+    };
+
+    return (
+        <div id="adminhome">
+            <Link to="/admin/createPro" className='btn btn-primary' style={{marginLeft: 835, marginBottom: 12}}><i className="fa-solid fa-circle-plus"></i>Thêm sản phẩm</Link>
+            <Table columns={columns} dataSource={data} pagination={{ pageSize: 4 }} onChange={handleTableChange} />
         </div>
-      </main>
-    </>
-  );
+    );
 };
 
 export default ListProductsPage;

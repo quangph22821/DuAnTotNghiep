@@ -50,6 +50,7 @@ const CreateOrigin = () => {
                         <button
                           type="submit" onClick={handleSubmit(onSubmit)}
                           className="btn btn-success bg-green-600 color-while mx-3"
+                          style={{marginRight: 5}}
                         >
                           Create
                         </button>

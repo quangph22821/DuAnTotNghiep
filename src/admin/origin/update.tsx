@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { AppDispatch } from "../../store";
 import { useDispatch } from "react-redux";
-import { IOrigin } from "../../models/products";
 import { useForm } from "react-hook-form";
 import { fetchOriginOne, fetchOriginUpdate } from "../../redux/origin.reducer";
 import { useEffect } from "react";
 import {message} from "antd"
+import { IOrigin } from "../../models/origin";
 
 const UpdateOrigin = () => {
   const navigate = useNavigate()
@@ -21,8 +21,6 @@ const UpdateOrigin = () => {
   })
   const onSubmit = async (body:any) => {
     try {
-    
-   
         await dispatch(fetchOriginUpdate(body)).unwrap()
         message.success({ content: "Cập nhật thành công", key: "update" });
         navigate("/admin/listOri")
@@ -69,6 +67,7 @@ const UpdateOrigin = () => {
                         <button
                           type="submit"onClick={handleSubmit(onSubmit)}
                           className="btn btn-success bg-green-600 color-while mx-3"
+                          style={{marginRight: 5}}
                         >
                           Update
                         </button>

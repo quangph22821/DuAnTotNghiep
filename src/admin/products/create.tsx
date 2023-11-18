@@ -11,48 +11,57 @@ import { fetchMaterialAll } from "../../redux/material.reducer";
 import { fetchOriginAll } from "../../redux/origin.reducer";
 
 const CreateProducts = () => {
-  const navigate = useNavigate()
-  const dispatch = useDispatch<AppDispatch>()
-  const { material } = useSelector((state: RootState) => state.material)
-  const { category } = useSelector((state: RootState) => state.categories)
-  const { origin } = useSelector((state: RootState) => state.origin)
-  const { register, handleSubmit, formState: { errors } } = useForm()
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { material } = useSelector((state: RootState) => state.material);
+  const { category } = useSelector((state: RootState) => state.categories);
+  const { origin } = useSelector((state: RootState) => state.origin);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const onSubmit = async (body: any) => {
     try {
       const images = await uploadFiles(body.img);
       const newData = { ...body, img: images };
-      await dispatch(fetchProductsAdd(newData)).unwrap()
+      await dispatch(fetchProductsAdd(newData)).unwrap();
       message.success({ content: "Thêm thành công", key: "add" });
-      navigate("/admin/listPro")
+      navigate("/admin/listPro");
       console.log(body);
-
-    } catch (error) { /* empty */ }
-  }
+    } catch (error) {
+      /* empty */
+    }
+  };
 
   useEffect(() => {
     //category
     const fetchCategories = async () => {
       try {
         await dispatch(fetchCategoriesAll()).unwrap();
-      } catch (error) { }
+      } catch (error) {}
     };
     //material
     const fetchMaterial = async () => {
       try {
-        await dispatch(fetchMaterialAll()).unwrap()
-      } catch (error) { /* empty */ }
-    }
+        await dispatch(fetchMaterialAll()).unwrap();
+      } catch (error) {
+        /* empty */
+      }
+    };
     //origin
     const fetchOrigin = async () => {
       try {
-        await dispatch(fetchOriginAll()).unwrap()
-      } catch (error) { /* empty */ }
-    }
+        await dispatch(fetchOriginAll()).unwrap();
+      } catch (error) {
+        /* empty */
+      }
+    };
 
-    fetchCategories()
-    fetchMaterial()
-    fetchOrigin()
-  }, [])
+    fetchCategories();
+    fetchMaterial();
+    fetchOrigin();
+  }, []);
   const uploadFiles = async (files: FileList): Promise<string[]> => {
     const CLOUD_NAME = "djhzlcf7o";
     const PRESET_NAME = "test-upload";
@@ -67,16 +76,16 @@ const CreateProducts = () => {
     for (const file of Array.from(files)) {
       formData.append("file", file);
       try {
-        message.loading({ content: 'Đang tải ảnh lên', key: 'upload' });
+        message.loading({ content: "Đang tải ảnh lên", key: "upload" });
         const response = await axios.post(api, formData, {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         });
         urls.push(response.data.secure_url);
       } catch (error) {
         console.log(error);
-        message.error({ content: 'Lỗi khi tải ảnh lên', key: 'upload' });
+        message.error({ content: "Lỗi khi tải ảnh lên", key: "upload" });
       }
     }
     return urls;
@@ -113,28 +122,29 @@ const CreateProducts = () => {
                               className="form-control"
                               id="inputPassword5"
                               min="0"
-                              {...register('price')}
+                              {...register("price")}
                             />
                           </div>
                         </div>
-                        <div className="form-group">
-                          <label htmlFor="inputAddress">Image</label>
-                          <br />
-                          <input
-                            type="file"
-                            id="inputAddress5"
-                            placeholder="1234 Main St"
-                            multiple
-                            {...register("img")}
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="inputAddress2">Description</label>
-                          <textarea
-                            className="form-control"
-                            id="inputAddress6" placeholder="Description"
-                            {...register("description")}
-                          />
+                        <div className="form-row">
+                          <div className="form-group col-md-6">
+                            <label htmlFor="inputAddress">Image</label>
+                            <br />
+                            <input
+                              type="file"
+                              multiple
+                              {...register("img")}
+                            />
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label htmlFor="inputAddress2">Description</label>
+                            <textarea
+                              className="form-control"
+                              id="inputAddress6"
+                              placeholder="Description"
+                              {...register("description")}
+                            />
+                          </div>
                         </div>
                         <div className="form-row">
                           <div className="form-group col-md-6">
@@ -160,48 +170,62 @@ const CreateProducts = () => {
                         </div>
                         <div className="form-row">
                           <div className="form-group col-md-4">
-                            <label htmlFor="inputState">Chất liệu</label>
-                            <select id="inputState5" className="form-control" {...register("materialId")}>
-                              <option value="">Chọn Chất Liệu</option>
+                            <label htmlFor="inputState">Xuất xứ</label>
+                            <select
+                              id="inputState5"
+                              className="form-control"
+                              {...register("materialId")}
+                            >
+                              <option value="">Chọn Xuất xứ</option>
                               {material.map((item) => {
                                 return (
                                   <option value={item._id}>{item.name}</option>
-                                )
-
+                                );
                               })}
                             </select>
                           </div>
                           <div className="form-group col-md-4">
-                            <label htmlFor="inputState">Xuất xứ</label>
-                            <select id="inputState5" className="form-control" {...register("originId")}>
-                              <option value="">Chọn Xuất Xứ</option>
+                            <label htmlFor="inputState">Chất liệu</label>
+                            <select
+                              id="inputState5"
+                              className="form-control"
+                              {...register("originId")}
+                            >
+                              <option value="">Chọn Chất Liệu</option>
                               {origin.map((item) => {
                                 return (
                                   <option value={item._id}>{item.name}</option>
-                                )
-
+                                );
                               })}
                             </select>
                           </div>
                           <div className="form-group col-md-4">
                             <label htmlFor="inputState">Danh mục</label>
-                            <select id="inputState5" className="form-control" {...register('categoryId')}>
+                            <select
+                              id="inputState5"
+                              className="form-control"
+                              {...register("categoryId")}
+                            >
                               <option value="">Chọn Danh Mục</option>
                               {category.map((item) => {
                                 return (
                                   <option value={item._id}>{item.name}</option>
-                                )
-
+                                );
                               })}
-
-
                             </select>
                           </div>
                         </div>
-                        <button type="submit" className="btn btn-success bg-green-600 color-while mx-3">
+                        <button
+                          type="submit"
+                          className="btn btn-success bg-green-600 color-while"
+                          style={{marginRight: 5, marginLeft: 18}}
+                        >
                           Create
                         </button>
-                        <button type="reset" className="btn btn-warning bg-yellow-600 ">
+                        <button
+                          type="reset"
+                          className="btn btn-warning bg-yellow-600 "
+                        >
                           Reset
                         </button>
                       </form>

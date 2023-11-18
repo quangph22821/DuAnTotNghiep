@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppDispatch } from "../../store";
 import { useForm } from "react-hook-form";
-import { ICategory } from "../../models/products";
 import {
   fetchCategoriesOne,
   fetchCategoriesUpdate,
@@ -10,6 +9,7 @@ import {
 import { useEffect } from "react";
 import { message } from "antd";
 import axios from "axios";
+import { ICategory } from "../../models/category";
 
 const UpdateCategory = () => {
   const navigate = useNavigate();
@@ -119,8 +119,9 @@ const UpdateCategory = () => {
                         <button
                           type="submit"
                           className="btn btn-success bg-green-600 color-while mx-3"
+                          style={{marginRight: 5}}
                         >
-                          update
+                          Update
                         </button>
                         <button
                           type="reset"

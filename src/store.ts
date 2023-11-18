@@ -4,6 +4,8 @@ import { originReducer } from "./redux/origin.reducer";
 import { materialReducer } from "./redux/material.reducer";
 import { categoryReducer } from "./redux/categories.reducer";
 import { userReducer } from "./redux/user.reducer";
+import { cartReducer } from "./redux/cart.reducer";
+import { billReducer } from "./redux/bill.reducer";
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +13,9 @@ export const store = configureStore({
     origin: originReducer,
     material: materialReducer,
     categories: categoryReducer,
-    users: userReducer
+    users: userReducer,
+    carts: cartReducer,
+    bills: billReducer,
   },
 });
 

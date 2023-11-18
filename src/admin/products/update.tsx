@@ -2,76 +2,91 @@ import { message } from "antd";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsOne, fetchProductsUpdate } from "../../redux/products.reducer";
+import {
+  fetchProductsOne,
+  fetchProductsUpdate,
+} from "../../redux/products.reducer";
 import { AppDispatch, RootState } from "../../store";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IProducts } from "../../models/products";
 import { fetchMaterialAll } from "../../redux/material.reducer";
 import { fetchOriginAll } from "../../redux/origin.reducer";
 import { fetchCategoriesAll } from "../../redux/categories.reducer";
 
 const UpdateProducts = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams()
-  console.log(id);
-  const dispatch = useDispatch<AppDispatch>()
-  const { material } = useSelector((state: RootState) => state.material)
-  const { category } = useSelector((state: RootState) => state.categories)
-  const { origin } = useSelector((state: RootState) => state.origin)
-  const { register, handleSubmit, formState: { errors } } = useForm<IProducts>({
+  
+  const [dataUpdate, setDataupdate] = useState([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const { material } = useSelector((state: RootState) => state.material);
+  const { category } = useSelector((state: RootState) => state.categories);
+  const { origin } = useSelector((state: RootState) => state.origin);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IProducts>({
     defaultValues: async () => {
       if (id) {
-        return await fetchProductById(id)
+        return await fetchProductById(id);
       }
-    }
-  })
+    },
+  });
   const onSubmit = async (body: any) => {
     try {
       const images = await uploadFiles(body.img);
       const newData = { ...body, img: images };
-      await dispatch(fetchProductsUpdate(newData)).unwrap()
+      await dispatch(fetchProductsUpdate(newData)).unwrap();
       message.success({ content: "Cập nhật thành công", key: "update" });
-      navigate("/admin/listPro")
+      navigate("/admin/listPro");
       console.log(body);
-
-    } catch (error) { /* empty */ }
-  }
+    } catch (error) {
+      /* empty */
+    }
+  };
 
   const fetchProductById = async (id: string) => {
-    const data = await dispatch(fetchProductsOne(id)).unwrap()
+    const data = await dispatch(fetchProductsOne(id)).unwrap();
+    setDataupdate(data)
     return data.product
-
-  }
+    
+  };
+  
+  
   useEffect(() => {
     if (id) {
-      fetchProductById(id)
+      fetchProductById(id);
     }
     ////////////////////////
     //category
     const fetchCategories = async () => {
       try {
         await dispatch(fetchCategoriesAll()).unwrap();
-      } catch (error) { }
+      } catch (error) {}
     };
     //material
     const fetchMaterial = async () => {
       try {
-        await dispatch(fetchMaterialAll()).unwrap()
-      } catch (error) { /* empty */ }
-    }
+        await dispatch(fetchMaterialAll()).unwrap();
+      } catch (error) {
+        /* empty */
+      }
+    };
     //origin
     const fetchOrigin = async () => {
       try {
-        await dispatch(fetchOriginAll()).unwrap()
-      } catch (error) { /* empty */ }
-    }
+        await dispatch(fetchOriginAll()).unwrap();
+      } catch (error) {
+        /* empty */
+      }
+    };
 
-    fetchCategories()
-    fetchMaterial()
-    fetchOrigin()
-
-  }, [])
+    fetchCategories();
+    fetchMaterial();
+    fetchOrigin();
+  }, []);
   const uploadFiles = async (files: FileList): Promise<string[]> => {
     const CLOUD_NAME = "djhzlcf7o";
     const PRESET_NAME = "test-upload";
@@ -86,16 +101,16 @@ const UpdateProducts = () => {
     for (const file of Array.from(files)) {
       formData.append("file", file);
       try {
-        message.loading({ content: 'Đang cập nhật...', key: 'upload' });
+        message.loading({ content: "Đang cập nhật...", key: "upload" });
         const response = await axios.post(api, formData, {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         });
         urls.push(response.data.secure_url);
       } catch (error) {
         console.log(error);
-        message.error({ content: 'Lỗi khi tải ảnh lên', key: 'upload' });
+        message.error({ content: "Lỗi khi tải ảnh lên", key: "upload" });
       }
     }
     return urls;
@@ -122,7 +137,8 @@ const UpdateProducts = () => {
                               type="text"
                               className="form-control"
                               id="inputEmail5"
-                              {...register('name')}
+                              {...register("name")}
+                              // defaultValue={dataUpdate?.product?.name}
                             />
                           </div>
                           <div className="form-group col-md-6">
@@ -132,28 +148,28 @@ const UpdateProducts = () => {
                               className="form-control"
                               id="inputPassword5"
                               min="0"
-                              {...register('price')}
+                              {...register("price")}
+                              // defaultValue={dataUpdate?.product?.price}
                             />
                           </div>
                         </div>
-                        <div className="form-group">
-                          <label htmlFor="inputAddress">Image</label>
-                          <br />
-                          <input
-                            type="file"
-                            id="inputAddress5"
-                            placeholder="1234 Main St"
-                            multiple
-                            {...register('img')}
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="inputAddress2">Description</label>
-                          <textarea
-                            className="form-control"
-                            id="inputAddress6" placeholder="Description"
-                            {...register('description')}
-                          />
+                        <div className="form-row">
+                          <div className="form-group col-md-6">
+                            <label htmlFor="inputAddress">Image</label>
+                            <br />
+                            <input type="file" multiple {...register("img")} />
+                            
+                          </div>
+                          <div className="form-group col-md-6">
+                            <label htmlFor="inputAddress2">Description</label>
+                            <textarea
+                              className="form-control"
+                              id="inputAddress6"
+                              placeholder="Description"
+                              {...register("description")}
+                              // defaultValue={dataUpdate?.product?.description}
+                            />
+                          </div>
                         </div>
                         <div className="form-row">
                           <div className="form-group col-md-6">
@@ -163,7 +179,8 @@ const UpdateProducts = () => {
                               className="form-control"
                               id="inputEmail5"
                               min="0"
-                              {...register('weight')}
+                              {...register("weight")}
+                              // defaultValue={dataUpdate?.product?.weight}
                             />
                           </div>
                           <div className="form-group col-md-6">
@@ -173,51 +190,66 @@ const UpdateProducts = () => {
                               className="form-control"
                               id="inputPassword5"
                               min="0"
-                              {...register('height')}
+                              {...register("height")}
+                              // defaultValue={dataUpdate?.product?.height}
                             />
                           </div>
                         </div>
                         <div className="form-row">
                           <div className="form-group col-md-4">
-                            <label htmlFor="inputState">Chất liệu</label>
-                            <select id="inputState5" className="form-control"   {...register('materialId')}>
-                              
+                            <label htmlFor="inputState">Xuất xứ</label>
+                            <select
+                              id="inputState5"
+                              className="form-control"
+                              {...register("materialId")}
+                            >
                               {material.map((item) => {
                                 return (
                                   <option value={item._id}>{item.name}</option>
-                                )
-
+                                );
                               })}
                             </select>
                           </div>
                           <div className="form-group col-md-4">
-                            <label htmlFor="inputState">Xuất xứ</label>
-                            <select id="inputState5" className="form-control"   {...register('originId')}>
-                              
+                            <label htmlFor="inputState">Chất liệu</label>
+                            <select
+                              id="inputState5"
+                              className="form-control"
+                              {...register("originId")}
+                            >
                               {origin.map((item) => {
                                 return (
                                   <option value={item._id}>{item?.name}</option>
-                                )
-
+                                );
                               })}
                             </select>
                           </div>
                           <div className="form-group col-md-4">
                             <label htmlFor="inputState">Danh mục</label>
-                            <select id="inputState5" className="form-control" {...register('categoryId')}>
+                            <select
+                              id="inputState5"
+                              className="form-control"
+                              {...register("categoryId")}
+                            >
                               {category.map((item) => {
                                 return (
                                   <option value={item._id}>{item.name}</option>
-                                )
-
+                                );
                               })}
                             </select>
                           </div>
                         </div>
-                        <button type="submit" className="btn btn-success bg-green-600 color-while mx-3">
+                        <button
+                          type="submit"
+                          className="btn btn-success bg-green-600 color-while mx-3"
+                          style={{ marginRight: 5, marginLeft: 18 }}
+                        >
                           Update
                         </button>
-                        <button type="reset" className="btn btn-warning bg-yellow-600 ">
+                        <button
+                          type="reset"
+                          className="btn btn-warning bg-yellow-600 "
+                        >
                           Reset
                         </button>
                       </form>

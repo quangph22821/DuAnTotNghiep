@@ -2,168 +2,144 @@ const Footer = () => {
   return (
     <>
       {/* footer */}
-      <footer className="bg-white pt-16 pb-12 border-t border-gray-100">
-        <div className="container grid grid-cols-1 ">
-          <div className="col-span-1 space-y-4">
-            <img src="../../../src/assets/images/logo.svg" alt="logo" className="w-30" />
-            <div className="mr-2">
-              <p className="text-gray-500">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia,
-                hic?
-              </p>
-            </div>
-            <div className="flex space-x-5">
-              <a href="#" className="text-gray-400 hover:text-gray-500">
-                <i className="fa-brands fa-facebook-square" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-gray-500">
-                <i className="fa-brands fa-instagram-square" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-gray-500">
-                <i className="fa-brands fa-twitter-square" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-gray-500">
-                <i className="fa-brands fa-github-square" />
-              </a>
+      <footer id="aa-footer">
+        {/* footer bottom */}
+        <div className="aa-footer-top">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="aa-footer-top-area">
+                  <div className="row">
+                    <div className="col-md-3 col-sm-6">
+                      <div className="aa-footer-widget">
+                        <h3>Main Menu</h3>
+                        <ul className="aa-footer-nav">
+                          <li>
+                            <a href="#">Home</a>
+                          </li>
+                          <li>
+                            <a href="#">Our Services</a>
+                          </li>
+                          <li>
+                            <a href="#">Our Products</a>
+                          </li>
+                          <li>
+                            <a href="#">About Us</a>
+                          </li>
+                          <li>
+                            <a href="#">Contact Us</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="col-md-3 col-sm-6">
+                      <div className="aa-footer-widget">
+                        <div className="aa-footer-widget">
+                          <h3>Knowledge Base</h3>
+                          <ul className="aa-footer-nav">
+                            <li>
+                              <a href="#">Delivery</a>
+                            </li>
+                            <li>
+                              <a href="#">Returns</a>
+                            </li>
+                            <li>
+                              <a href="#">Services</a>
+                            </li>
+                            <li>
+                              <a href="#">Discount</a>
+                            </li>
+                            <li>
+                              <a href="#">Special Offer</a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-3 col-sm-6">
+                      <div className="aa-footer-widget">
+                        <div className="aa-footer-widget">
+                          <h3>Useful Links</h3>
+                          <ul className="aa-footer-nav">
+                            <li>
+                              <a href="#">Site Map</a>
+                            </li>
+                            <li>
+                              <a href="#">Search</a>
+                            </li>
+                            <li>
+                              <a href="#">Advanced Search</a>
+                            </li>
+                            <li>
+                              <a href="#">Suppliers</a>
+                            </li>
+                            <li>
+                              <a href="#">FAQ</a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-3 col-sm-6">
+                      <div className="aa-footer-widget">
+                        <div className="aa-footer-widget">
+                          <h3>Contact Us</h3>
+                          <address>
+                            <p> 25 Astor Pl, NY 10003, USA</p>
+                            <p>
+                              <span className="fa fa-phone" />
+                              +1 212-982-4589
+                            </p>
+                            <p>
+                              <span className="fa fa-envelope" />
+                              dailyshop@gmail.com
+                            </p>
+                          </address>
+                          <div className="aa-footer-social">
+                            <a href="#">
+                              <span className="fa fa-facebook" />
+                            </a>
+                            <a href="#">
+                              <span className="fa fa-twitter" />
+                            </a>
+                            <a href="#">
+                              <span className="fa fa-google-plus" />
+                            </a>
+                            <a href="#">
+                              <span className="fa fa-youtube" />
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="col-span-2 grid grid-cols-2 gap-4">
-            <div className="grid grid-cols-2 gap-4 md:gap-8">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                  Solutions
-                </h3>
-                <div className="mt-4 space-y-4">
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Marketing
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Analitycs
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Commerce
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Insights
-                  </a>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                  Support
-                </h3>
-                <div className="mt-4 space-y-4">
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Pricing
-                  </a>
-                  {/* <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Documentation</a> */}
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Guides
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    API Status
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                  Solutions
-                </h3>
-                <div className="mt-4 space-y-4">
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Marketing
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Analitycs
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Commerce
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Insights
-                  </a>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                  Support
-                </h3>
-                <div className="mt-4 space-y-4">
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Pricing
-                  </a>
-                  {/* <a href="#" class="text-base text-gray-500 hover:text-gray-900 block">Documentation</a> */}
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    Guides
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base text-gray-500 hover:text-gray-900 block"
-                  >
-                    API Status
-                  </a>
+        </div>
+        {/* footer-bottom */}
+        <div className="aa-footer-bottom">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="aa-footer-bottom-area">
+                  <p>
+                    Designed by <a href="http://www.markups.io/">MarkUps.io</a>
+                  </p>
+                  <div className="aa-footer-payment">
+                    <span className="fa fa-cc-mastercard" />
+                    <span className="fa fa-cc-visa" />
+                    <span className="fa fa-paypal" />
+                    <span className="fa fa-cc-discover" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </footer>
-      {/* ./footer */}
-      {/* copyright */}
-      <div className="bg-gray-800 py-4">
-        <div className="container flex items-center justify-between">
-          <p className="text-white">© TailCommerce - All Right Reserved</p>
-          <div>
-            <img
-              src="../../../src/assets/images/methods.png"
-              alt="methods"
-              className="h-5"
-            />
-          </div>
-        </div>
-      </div>
-      {/* ./copyright */}
+      {/* / footer */}
     </>
   );
 };

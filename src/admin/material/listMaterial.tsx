@@ -1,157 +1,127 @@
-import { useDispatch, useSelector } from "react-redux";
+import { Button, message, Popconfirm, Space, Table } from "antd";
+import type { ColumnsType, TableProps } from "antd/es/table";
 import { Link } from "react-router-dom";
-import { AppDispatch, RootState } from "../../store";
-import { fetchMaterialAll, fetchMaterialRemove } from "../../redux/material.reducer";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { message } from "antd";
+import { RootState } from "../../store";
+import { IMaterial } from "../../models/material";
+import {
+  fetchMaterialAll,
+  fetchMaterialRemove,
+} from "../../redux/material.reducer";
+
+interface MaterialData extends IMaterial {
+  recordKey: string;
+}
+
+interface DataType {
+  key: string;
+  name: string;
+}
+
 const ListMaterialPage = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { material } = useSelector((state: RootState) => state.material)
-  const fetchMaterial = async () => {
-    try {
-      await dispatch(fetchMaterialAll()).unwrap()
-    } catch (error) { /* empty */ }
-  }
-  console.log(material);
-
+  const { material } = useSelector((state: RootState) => state.material);
+  const dispatch = useDispatch();
   useEffect(() => {
-    fetchMaterial()
-  }, [])
-
-  const checkDelete = async (id: string) => {
-
-    const tb = window.confirm("Are you sure you want to delete")
-    if (tb) {
-      await dispatch(fetchMaterialRemove(id)).unwrap()
-      await dispatch(fetchMaterialAll()).unwrap()
-      message.success({ content: "Xóa thành công", key: "" });
+    dispatch(fetchMaterialAll());
+  }, []);
+  const datass: IMaterial[] = material;
+  const confirmDelete = async (materialId: string) => {
+    try {
+      await dispatch(fetchMaterialRemove(materialId));
+      await dispatch(fetchMaterialAll());
+      message.success("Nơi xuất xứ đã được xóa thành công");
+    } catch (error) {
+      if (!error) {
+        setTimeout(message.loading("đang sử lí .."), 2000);
+      } else {
+        message.error(`Lỗi khi xóa nơi xuất xứ này: ${error}`);
+      }
     }
-  }
+  };
+
+  const cancelDelete = () => {
+    message.error("Bạn đã hủy thao tác xóa");
+  };
+
+  const uniqueNames = Array.from(
+    new Set(datass?.map((user: any) => user.name))
+  );
+  const nameFilters = uniqueNames.map((name) => ({ text: name, value: name }));
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      width: "30%",
+      filters: nameFilters,
+      onFilter: (value, record) => record.name.indexOf(value.toString()) === 0,
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: "Action",
+      dataIndex: "",
+      key: "x",
+      width: "20%",
+      render: (_, record) => (
+        <Space size="middle">
+          <Link to={`/admin/updateMate/${record.key}`}>
+            <Button className="btn-edit text-[#30D200] border-[#31d200cb] hover:text-[#31d200ba] hover:border-[#30D200] active:border-[#30D200]">
+              Edit
+            </Button>
+          </Link>
+          <Popconfirm
+            title="Bạn có chắc chắn là muốn xóa nơi xuất xứ này?"
+            onConfirm={() => confirmDelete(record.key)}
+            onCancel={cancelDelete}
+            okText="Đồng ý"
+            cancelText="Không"
+          >
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
+
+  const data: DataType[] = datass?.map((user) => ({
+    key: user._id,
+    name: user.name,
+  }));
+
+  const materialData: MaterialData[] = datass?.map((material) => ({
+    ...material,
+    recordKey: material._id,
+  }));
+  console.log(materialData);
+
+  const handleTableChange: TableProps<DataType>["onChange"] = (
+    pagination,
+    filters,
+    sorter,
+    extra
+  ) => {
+    console.log("Table parameters:", pagination, filters, sorter, extra);
+  };
+
   return (
-    <>
-      <main role="main" className="main-content">
-        <div className="container-fluid">
-          <div className="row justify-content-center">
-            <div className="col-12">
-              <div className="row">
-                {/* Striped rows */}
-                <div className="col-md-12 my-4">
-                  <h2 className="h4 mb-1">Material</h2>
-                  <p className="mb-4">
-                    Customized table based on Bootstrap with additional elements
-                    and more functions
-                  </p>
-                  <div className="card shadow">
-                    <div className="card-body">
-                      <div className="toolbar row mb-3">
-                        <div className="col">
-                          <form className="form-inline">
-                            <div className="form-row">
-                              <div className="form-group col-auto">
-                                <label className="sr-only">Search</label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  defaultValue=""
-                                  placeholder="Search"
-                                />
-                              </div>
-                              <div className="form-group col-auto ml-3">
-                                <label className="my-1 mr-2 sr-only">
-                                  Status
-                                </label>
-                                <select className="custom-select my-1 mr-sm-2">
-                                  <option>Choose...</option>
-                                  <option value={1}>Processing</option>
-                                  <option value={2}>Success</option>
-                                  <option value={3}>Pending</option>
-                                  <option value={3}>Hold</option>
-                                </select>
-                              </div>
-                            </div>
-                          </form>
-                        </div>
-                        <div className="col ml-auto">
-                          <div className="dropdown float-right">
-                            <Link
-                              to="/admin/createMate"
-                              className="btn btn-primary float-right ml-3"
-                            >
-                              Add more +
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                      {/* table */}
-                      <table className="table table-bordered">
-                        <thead>
-                          <tr role="row">
-                            <th>STT</th>
-                            <th>Name</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                     {material.map((item,index)=>(
-                           <tr>
-                           <td>{index+1}</td>
-                           <td>{item.name}</td>
-                           <td>
-                             <Link to={`/admin/updateMate/${item._id}`}>
-                               <span className="badge badge-warning mx-2">
-                                 Update
-                               </span>
-                             </Link>
-                             <button><span className="badge badge-danger" onClick={()=>checkDelete(item._id)}>Delete</span></button>
-                           </td>
-                         </tr>
-                       
-                     ))}
-                        </tbody>
-                      </table>
-                      <nav
-                        aria-label="Table Paging"
-                        className="mb-0 text-muted"
-                      >
-                        <ul className="pagination justify-content-end mb-0">
-                          <li className="page-item">
-                            <a className="page-link" href="#">
-                              Previous
-                            </a>
-                          </li>
-                          <li className="page-item">
-                            <a className="page-link" href="#">
-                              1
-                            </a>
-                          </li>
-                          <li className="page-item">
-                            <a className="page-link" href="#">
-                              2
-                            </a>
-                          </li>
-                          <li className="page-item">
-                            <a className="page-link" href="#">
-                              3
-                            </a>
-                          </li>
-                          <li className="page-item">
-                            <a className="page-link" href="#">
-                              Next
-                            </a>
-                          </li>
-                        </ul>
-                      </nav>
-                    </div>
-                  </div>
-                </div>{" "}
-                {/* simple table */}
-              </div>{" "}
-              {/* end section */}
-            </div>
-          </div>
-        </div>
-      </main>
-    </>
+    <div id="adminhome">
+      <Link
+        to="/admin/createMate"
+        className="btn btn-primary"
+        style={{ marginLeft: 835, marginBottom: 12 }}
+      >
+        <i className="fa-solid fa-circle-plus"></i>Thêm xuất xứ
+      </Link>
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={{ pageSize: 6 }}
+        onChange={handleTableChange}
+      />
+    </div>
   );
 };
 

@@ -1,204 +1,229 @@
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
+import { cartReducer, fetchCartUser } from "../redux/cart.reducer";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { message } from "antd";
+import { fetchCkeckOutBill } from "../redux/bill.reducer";
+import { useNavigate } from "react-router-dom";
+
 const CheckoutPage = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { cart } = useSelector((state: RootState) => state.carts);
+  const navigate = useNavigate();
+  const [cartId, setCartId] = useState({} as any);
+  const [cartComfirm, setCartComfirm] = useState([])
+  const fetchCarts = async (_id: string) => {
+    try {
+      const data = await dispatch(fetchCartUser(_id)).unwrap();
+      // console.log(data);
+      setCartId(data);
+    } catch (error) {}
+  };
+
+  let totalAll = 0;
+  for (let i = 0; i < cart.length; i++) {
+    totalAll += cart[i].quantity * cart[i].productId?.price;
+  }
+  useEffect(() => {
+    fetchCarts();
+  }, []);
+
+  // Thanh toán
+  const { register, handleSubmit, setValue } = useForm({});
+  const onSubmitBill = async (data: any) => {
+    try {
+      if (data.name == "" || data.phone == "" || data.location == "") {
+        message.warning("Bạn phải Nhập đầy đủ các Trường !!");
+        return;
+      }
+      // if (data.totalPrice == 0) {
+      //   message.warning("Giá trị tổng tiền phải lớn hơn 0");
+      //   return;
+      // }
+
+      console.log(data);
+      await dispatch(fetchCkeckOutBill(data));
+      message.success("Bạn đã đặt hàng thành công!!");
+      // console.log(data);
+      navigate("/bill");
+      setCartComfirm([])
+      return cartComfirm
+    } catch ({ response }: any) {}
+  };
+  useEffect(() => {
+    setValue("cartId", cartId._id); // Đặt giá trị mặc định cho trường 'id'
+  }, [cartId._id, setValue]);
   return (
     <>
-      {/* breadcrumb */}
-      <div className="container py-4 flex items-center gap-3">
-        <a href="../index.html" className="text-primary text-base">
-          <i className="fa-solid fa-house" />
-        </a>
-        <span className="text-sm text-gray-400">
-          <i className="fa-solid fa-chevron-right" />
-        </span>
-        <p className="text-gray-600 font-medium">Checkout</p>
-      </div>
-      {/* ./breadcrumb */}
-      {/* wrapper */}
-      <div className="container grid grid-cols-12 items-start pb-16 pt-4 gap-6">
-        <div className="col-span-8 border border-gray-200 p-4 rounded">
-          <h3 className="text-lg font-medium capitalize mb-4">Checkout</h3>
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="first-name" className="text-gray-600">
-                  First Name <span className="text-primary">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="first-name"
-                  id="first-name"
-                  className="input-box"
-                />
-              </div>
-              <div>
-                <label htmlFor="last-name" className="text-gray-600">
-                  Last Name <span className="text-primary">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="last-name"
-                  id="last-name"
-                  className="input-box"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="company" className="text-gray-600">
-                Company
-              </label>
-              <input
-                type="text"
-                name="company"
-                id="company"
-                className="input-box"
-              />
-            </div>
-            <div>
-              <label htmlFor="region" className="text-gray-600">
-                Country/Region
-              </label>
-              <input
-                type="text"
-                name="region"
-                id="region"
-                className="input-box"
-              />
-            </div>
-            <div>
-              <label htmlFor="address" className="text-gray-600">
-                Street address
-              </label>
-              <input
-                type="text"
-                name="address"
-                id="address"
-                className="input-box"
-              />
-            </div>
-            <div>
-              <label htmlFor="city" className="text-gray-600">
-                City
-              </label>
-              <input type="text" name="city" id="city" className="input-box" />
-            </div>
-            <div>
-              <label htmlFor="phone" className="text-gray-600">
-                Phone number
-              </label>
-              <input
-                type="text"
-                name="phone"
-                id="phone"
-                className="input-box"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="text-gray-600">
-                Email address
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="input-box"
-              />
-            </div>
-            <div>
-              <label htmlFor="company" className="text-gray-600">
-                Company
-              </label>
-              <input
-                type="text"
-                name="company"
-                id="company"
-                className="input-box"
-              />
+      {/* catg header banner section */}
+      <section id="aa-catg-head-banner">
+        <img
+          src="../../src/assets/img/banner_dragon_ball_00000_05cb195981c248dd9de71a0e727e7b6a.jpg"
+          alt=""
+          style={{ width: "100%", height: 300 }}
+        />
+        <div className="aa-catg-head-banner-area">
+          <div className="container">
+            <div className="aa-catg-head-banner-content">
+              <h2>Checkout Page</h2>
+              <ol className="breadcrumb">
+                <li>
+                  <a href="index.html">Home</a>
+                </li>
+                <li className="active">Checkout</li>
+              </ol>
             </div>
           </div>
         </div>
-        <div className="col-span-4 border border-gray-200 p-4 rounded">
-          <h4 className="text-gray-800 text-lg mb-4 font-medium uppercase">
-            order summary
-          </h4>
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <div>
-                <h5 className="text-gray-800 font-medium">
-                  Italian shape sofa
-                </h5>
-                <p className="text-sm text-gray-600">Size: M</p>
+      </section>
+      {/* / catg header banner section */}
+      {/* Cart view section */}
+      <section id="checkout">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="checkout-area">
+                <form onSubmit={handleSubmit(onSubmitBill)}>
+                  <input type="hidden" {...register("cartId")} />
+                  <input
+                    type="hidden"
+                    {...register("totalPrice")}
+                    value={totalAll}
+                  />
+                  <div className="row">
+                    <div className="col-md-8">
+                      <div className="checkout-left">
+                        <div className="panel-group" id="accordion">
+                          {/* Billing Details */}
+                          <div className="panel panel-default aa-checkout-billaddress">
+                            <div className="panel-heading">
+                              <h4 className="panel-title">
+                                <a
+                                  data-toggle="collapse"
+                                  data-parent="#accordion"
+                                  href="#collapseOne"
+                                >
+                                  Billing Details
+                                </a>
+                              </h4>
+                            </div>
+                            <div
+                              id="collapseOne"
+                              className="panel-collapse collapse in"
+                            >
+                              <div className="panel-body">
+                                <div className="row">
+                                  <div className="col-md-6">
+                                    <div className="aa-checkout-single-bill">
+                                      <input
+                                        type="text"
+                                        placeholder="Tên khách hàng*"
+                                        {...register("name")}
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="col-md-6">
+                                    <div className="aa-checkout-single-bill">
+                                      <input
+                                        type="number"
+                                        placeholder="Số điện thoại*"
+                                        {...register("phone")}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="row">
+                                  <div className="col-md-12">
+                                    <div className="aa-checkout-single-bill">
+                                      <textarea
+                                        placeholder="Address"
+                                        {...register("location")}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="checkout-right">
+                        <h4>Order Summary</h4>
+                        <div className="aa-order-summary-area">
+                          <table className="table table-responsive">
+                            <thead>
+                              <tr>
+                                <th>Product</th>
+                                <th>Total</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {cart.map((item) => (
+                                <tr>
+                                  <td>
+                                    {item?.productId?.name}
+                                    <strong> x {item?.quantity}</strong>
+                                  </td>
+                                  <td>
+                                    {item?.productId?.price * item?.quantity}
+                                    .000 VNĐ
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th>Total</th>
+                                <td>{totalAll}.000 VNĐ</td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                        <h4>Payment Method</h4>
+                        <div className="aa-payment-method">
+                          <label htmlFor="cashdelivery">
+                            <input
+                              type="radio"
+                              id="cashdelivery"
+                              name="optionsRadios"
+                            />{" "}
+                            Thanh toán khi nhận hàng{" "}
+                          </label>
+                          <label htmlFor="paypal">
+                            <input
+                              type="radio"
+                              id="paypal"
+                              name="optionsRadios"
+                            />{" "}
+                            Chuyển khoản ngân hàng{" "}
+                          </label>
+                          <label htmlFor="paypal">
+                            <input
+                              type="radio"
+                              id="paypal"
+                              name="optionsRadios"
+                            />{" "}
+                            Thanh toán qua ví điện tử{" "}
+                          </label>
+                          <input
+                            type="submit"
+                            defaultValue="Place Order"
+                            className="aa-browse-btn"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
               </div>
-              <p className="text-gray-600">x3</p>
-              <p className="text-gray-800 font-medium">$320</p>
-            </div>
-            <div className="flex justify-between">
-              <div>
-                <h5 className="text-gray-800 font-medium">
-                  Italian shape sofa
-                </h5>
-                <p className="text-sm text-gray-600">Size: M</p>
-              </div>
-              <p className="text-gray-600">x3</p>
-              <p className="text-gray-800 font-medium">$320</p>
-            </div>
-            <div className="flex justify-between">
-              <div>
-                <h5 className="text-gray-800 font-medium">
-                  Italian shape sofa
-                </h5>
-                <p className="text-sm text-gray-600">Size: M</p>
-              </div>
-              <p className="text-gray-600">x3</p>
-              <p className="text-gray-800 font-medium">$320</p>
-            </div>
-            <div className="flex justify-between">
-              <div>
-                <h5 className="text-gray-800 font-medium">
-                  Italian shape sofa
-                </h5>
-                <p className="text-sm text-gray-600">Size: M</p>
-              </div>
-              <p className="text-gray-600">x3</p>
-              <p className="text-gray-800 font-medium">$320</p>
             </div>
           </div>
-          <div className="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
-            <p>subtotal</p>
-            <p>$1280</p>
-          </div>
-          <div className="flex justify-between border-b border-gray-200 mt-1 text-gray-800 font-medium py-3 uppercas">
-            <p>shipping</p>
-            <p>Free</p>
-          </div>
-          <div className="flex justify-between text-gray-800 font-medium py-3 uppercas">
-            <p className="font-semibold">Total</p>
-            <p>$1280</p>
-          </div>
-          <div className="flex items-center mb-4 mt-2">
-            <input
-              type="checkbox"
-              name="aggrement"
-              id="aggrement"
-              className="text-primary focus:ring-0 rounded-sm cursor-pointer w-3 h-3"
-            />
-            <label
-              htmlFor="aggrement"
-              className="text-gray-600 ml-3 cursor-pointer text-sm"
-            >
-              I agree to the{" "}
-              <a href="#" className="text-primary">
-                terms &amp; conditions
-              </a>
-            </label>
-          </div>
-          <a
-            href="#"
-            className="block w-full py-3 px-4 text-center text-white bg-primary border border-primary rounded-md hover:bg-transparent hover:text-primary transition font-medium"
-          >
-            Place order
-          </a>
         </div>
-      </div>
-      {/* ./wrapper */}
+      </section>
+      {/* / Cart view section */}
     </>
   );
 };

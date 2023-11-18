@@ -8,10 +8,8 @@ import AboutPage from "./pages/about";
 import SigninPage from "./pages/signin";
 import SignupPage from "./pages/signup";
 import UserLayout from "./components/layout/UserLayout";
-import CheckoutPage from "./pages/checkout";
 import AdminLayout from "./components/layout/AdminLayout";
 import HistoryPage from "./admin/history";
-import ListCartPage from "./admin/cart/listCart";
 import ListCategoryPage from "./admin/category/listCategory";
 import ListUsersPage from "./admin/users/listUsers";
 import ListProductsPage from "./admin/products/listProducts";
@@ -27,6 +25,15 @@ import UpdateOrigin from "./admin/origin/update";
 import ListMaterialPage from "./admin/material/listMaterial";
 import CreateMaterial from "./admin/material/create";
 import UpdateMaterial from "./admin/material/update";
+import ProfilePage from "./pages/profile";
+import ListBillPage from "./admin/bill/listBill";
+import CheckoutPage from "./pages/checkout";
+import BillPage from "./pages/bill/bill";
+import UpdateBill from "./admin/bill/update";
+import DeliverningPage from "./pages/bill/Delivering";
+import DeliveredPage from "./pages/bill/Delivered";
+import ComfirmedPage from "./pages/bill/comfirmed";
+import CancelledPage from "./pages/bill/cancelled";
 
 const router = createBrowserRouter([
   {
@@ -37,11 +44,17 @@ const router = createBrowserRouter([
       { path: "/detail/:_id", element: <DetailPage /> },
       { path: "/shop", element: <ShopPage /> },
       { path: "/cart", element: <CartPage /> },
+      { path: "/bill", element: <BillPage /> },
+      { path: "/delivered", element: <DeliveredPage /> },
+      { path: "/deliverning", element: <DeliverningPage /> },
+      { path: "/comfirmed", element: <ComfirmedPage /> },
+      { path: "/cancelled", element: <CancelledPage /> },
       { path: "/contact", element: <ContactPage /> },
       { path: "/about", element: <AboutPage /> },
       { path: "/checkout", element: <CheckoutPage /> },
       { path: "/signin", element: <SigninPage /> },
       { path: "/signup", element: <SignupPage /> },
+      { path: "/profile", element: <ProfilePage /> },
     ],
   },
 
@@ -65,20 +78,16 @@ const router = createBrowserRouter([
       // Origin
       { path: "/admin/listOri", element: <ListOriginPage /> },
       { path: "/admin/createOri", element: <CreateOrigin /> },
-      { path: "/admin/updateOri", element: <UpdateOrigin /> },
+      { path: "/admin/updateOri/:id", element: <UpdateOrigin /> },
 
       // Material
       { path: "/admin/listMate", element: <ListMaterialPage /> },
       { path: "/admin/createMate", element: <CreateMaterial /> },
-      { path: "/admin/updateMate", element: <UpdateMaterial /> },
+      { path: "/admin/updateMate/:id", element: <UpdateMaterial /> },
 
-      // Category
-      { path: "/admin/listCate", element: <ListCategoryPage /> },
-      { path: "/admin/createCate", element: <CreateCategory /> },
-      { path: "/admin/updateCate", element: <UpdateCategory /> },
-
-      // Cart
-      { path: "/admin/listCart", element: <ListCartPage /> },
+      // Bill
+      { path: "/admin/listBill", element: <ListBillPage /> },
+      { path: "/admin/updateBill/:id", element: <UpdateBill /> },
 
       // Users
       { path: "/admin/listUser", element: <ListUsersPage /> },

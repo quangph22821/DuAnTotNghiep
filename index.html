@@ -2,305 +2,118 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Get started with a free and open-source admin dashboard layout built with Tailwind CSS and Flowbite featuring charts, widgets, CRUD layouts, authentication pages, and more">
-    <meta name="author" content="Themesberg">
-    <meta name="generator" content="Hugo 0.58.2">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anime | DragonBall Shop</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <title>Dragon Ball Shop</title>
+  <!-- Font awesome -->
+  <link href="./src/assets/css/font-awesome.css" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="./src/assets/css/bootstrap.css" rel="stylesheet">
+  <!-- SmartMenus jQuery Bootstrap Addon CSS -->
+  <link href="./src/assets/css/jquery.smartmenus.bootstrap.css" rel="stylesheet">
+  <!-- Product view slider -->
+  <link rel="stylesheet" type="text/css" href="./src/assets/css/jquery.simpleLens.css">
+  <!-- slick slider -->
+  <link rel="stylesheet" type="text/css" href="./src/assets/css/slick.css">
+  <!-- price picker slider -->
+  <link rel="stylesheet" type="text/css" href="./src/assets/css/nouislider.css">
+  <!-- Theme color -->
+  <link id="switcher" href="./src/assets/css/theme-color/default-theme.css" rel="stylesheet">
+  <!-- <link id="switcher" href="./src/assets/css/theme-color/bridge-theme.css" rel="stylesheet"> -->
+  <!-- Top Slider CSS -->
+  <link href="./src/assets/css/sequence-theme.modern-slide-in.css" rel="stylesheet" media="all">
 
-    <link rel="shortcut icon" href="./src/assets/images/favicon/favicon.ico" type="image/x-icon">
+  <!-- Main style sheet -->
+  <link href="./src/assets/css/style.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="./src/assets/css/main.css">
+  <!-- Google Font -->
+  <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
-        rel="stylesheet">
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!-- [if lt IE 9]> -->
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <!-- <![endif] -->
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <!-- Simple bar CSS -->
-    <link rel="stylesheet" href="./src/assets/css/simplebar.css">
-    <!-- Fonts CSS -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <!-- Icons CSS -->
-    <link rel="stylesheet" href="./src/assets/css/feather.css">
-    <link rel="stylesheet" href="./src/assets/css/select2.css">
-    <link rel="stylesheet" href="./src/assets/css/dropzone.css">
-    <link rel="stylesheet" href="./src/assets/css/uppy.min.css">
-    <link rel="stylesheet" href="./src/assets/css/jquery.steps.css">
-    <link rel="stylesheet" href="./src/assets/css/jquery.timepicker.css">
-    <link rel="stylesheet" href="./src/assets/css/quill.snow.css">
-    <!-- Date Range Picker CSS -->
-    <link rel="stylesheet" href="./src/assets/css/daterangepicker.css">
-    <!-- App CSS -->
-    <link rel="stylesheet" href="./src/assets/css/app-light.css" id="lightTheme">
-    <link rel="stylesheet" href="./src/assets/css/app-dark.css" id="darkTheme" disabled>
-
+  <!-- Dashboard Admin -->
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="./src/assets/admin/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="./src/assets/admin/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <!-- endinject -->
+  <!-- Layout styles -->
+  <!-- <link rel="stylesheet" href="./src/assets/admin/css/styleadmin.csss"> -->
+  <!-- End layout styles -->
+  <link rel="shortcut icon" href="./src/assets/admin/images/favicon.ico" />
 
 
 </head>
 
 <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <!-- wpf loader Two -->
+  <div id="wpf-loader-two">
+    <div class="wpf-loader-two-inner">
+      <span>Loading</span>
+    </div>
+  </div>
+  <!-- / wpf loader Two -->
+  <!-- SCROLL TOP BUTTON -->
+  <a class="scrollToTop" href="#"><i class="fa fa-chevron-up"></i></a>
+  <!-- END SCROLL TOP BUTTON -->
+  <div id="root"></div>
 
-    <script src="./src/assets/js/jquery.min.js"></script>
-    <script src="./src/assets/js/popper.min.js"></script>
-    <script src="./src/assets/js/moment.min.js"></script>
-    <script src="./src/assets/js/bootstrap.min.js"></script>
-    <script src="./src/assets/js/simplebar.min.js"></script>
-    <script src='./src/assets/js/daterangepicker.js'></script>
-    <script src='./src/assets/js/jquery.stickOnScroll.js'></script>
-    <script src="./src/assets/js/tinycolor-min.js"></script>
-    <script src="./src/assets/js/config.js"></script>
-    <script src="./src/assets/js/d3.min.js"></script>
-    <script src="./src/assets/js/topojson.min.js"></script>
-    <script src="./src/assets/js/datamaps.all.min.js"></script>
-    <script src="./src/assets/js/datamaps-zoomto.js"></script>
-    <script src="./src/assets/js/datamaps.custom.js"></script>
-    <script src="./src/assets/js/Chart.min.js"></script>
-    <script>
-      /* defind global options */
-      Chart.defaults.global.defaultFontFamily = base.defaultFontFamily;
-      Chart.defaults.global.defaultFontColor = colors.mutedColor;
-    </script>
-    <script src="./src/assets/js/gauge.min.js"></script>
-    <script src="./src/assets/js/jquery.sparkline.min.js"></script>
-    <script src="./src/assets/js/apexcharts.min.js"></script>
-    <script src="./src/assets/js/apexcharts.custom.js"></script>
-    <script src='./src/assets/js/jquery.mask.min.js'></script>
-    <script src='./src/assets/js/select2.min.js'></script>
-    <script src='./src/assets/js/jquery.steps.min.js'></script>
-    <script src='./src/assets/js/jquery.validate.min.js'></script>
-    <script src='./src/assets/js/jquery.timepicker.js'></script>
-    <script src='./src/assets/js/dropzone.min.js'></script>
-    <script src='./src/assets/js/uppy.min.js'></script>
-    <script src='./src/assets/js/quill.min.js'></script>
-    <!-- <script>
-      $('.select2').select2(
-      {
-        theme: 'bootstrap4',
-      });
-      $('.select2-multi').select2(
-      {
-        multiple: true,
-        theme: 'bootstrap4',
-      });
-      $('.drgpicker').daterangepicker(
-      {
-        singleDatePicker: true,
-        timePicker: false,
-        showDropdowns: true,
-        locale:
-        {
-          format: 'MM/DD/YYYY'
-        }
-      });
-      $('.time-input').timepicker(
-      {
-        'scrollDefault': 'now',
-        'zindex': '9999' /* fix modal open */
-      });
-      /** date range picker */
-      if ($('.datetimes').length)
-      {
-        $('.datetimes').daterangepicker(
-        {
-          timePicker: true,
-          startDate: moment().startOf('hour'),
-          endDate: moment().startOf('hour').add(32, 'hour'),
-          locale:
-          {
-            format: 'M/DD hh:mm A'
-          }
-        });
-      }
-      var start = moment().subtract(29, 'days');
-      var end = moment();
+  <script type="module" src="/src/main.tsx"></script>
 
-      function cb(start, end)
-      {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-      }
-      $('#reportrange').daterangepicker(
-      {
-        startDate: start,
-        endDate: end,
-        ranges:
-        {
-          'Today': [moment(), moment()],
-          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-          'This Month': [moment().startOf('month'), moment().endOf('month')],
-          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        }
-      }, cb);
-      cb(start, end);
-      $('.input-placeholder').mask("00/00/0000",
-      {
-        placeholder: "__/__/____"
-      });
-      $('.input-zip').mask('00000-000',
-      {
-        placeholder: "____-___"
-      });
-      $('.input-money').mask("#.##0,00",
-      {
-        reverse: true
-      });
-      $('.input-phoneus').mask('(000) 000-0000');
-      $('.input-mixed').mask('AAA 000-S0S');
-      $('.input-ip').mask('0ZZ.0ZZ.0ZZ.0ZZ',
-      {
-        translation:
-        {
-          'Z':
-          {
-            pattern: /[0-9]/,
-            optional: true
-          }
-        },
-        placeholder: "___.___.___.___"
-      });
-      // editor
-      var editor = document.getElementById('editor');
-      if (editor)
-      {
-        var toolbarOptions = [
-          [
-          {
-            'font': []
-          }],
-          [
-          {
-            'header': [1, 2, 3, 4, 5, 6, false]
-          }],
-          ['bold', 'italic', 'underline', 'strike'],
-          ['blockquote', 'code-block'],
-          [
-          {
-            'header': 1
-          },
-          {
-            'header': 2
-          }],
-          [
-          {
-            'list': 'ordered'
-          },
-          {
-            'list': 'bullet'
-          }],
-          [
-          {
-            'script': 'sub'
-          },
-          {
-            'script': 'super'
-          }],
-          [
-          {
-            'indent': '-1'
-          },
-          {
-            'indent': '+1'
-          }], // outdent/indent
-          [
-          {
-            'direction': 'rtl'
-          }], // text direction
-          [
-          {
-            'color': []
-          },
-          {
-            'background': []
-          }], // dropdown with defaults from theme
-          [
-          {
-            'align': []
-          }],
-          ['clean'] // remove formatting button
-        ];
-        var quill = new Quill(editor,
-        {
-          modules:
-          {
-            toolbar: toolbarOptions
-          },
-          theme: 'snow'
-        });
-      }
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
-      (function()
-      {
-        'use strict';
-        window.addEventListener('load', function()
-        {
-          // Fetch all the forms we want to apply custom Bootstrap validation styles to
-          var forms = document.getElementsByClassName('needs-validation');
-          // Loop over them and prevent submission
-          var validation = Array.prototype.filter.call(forms, function(form)
-          {
-            form.addEventListener('submit', function(event)
-            {
-              if (form.checkValidity() === false)
-              {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-              form.classList.add('was-validated');
-            }, false);
-          });
-        }, false);
-      })();
-    </script>
-    <script>
-      var uptarg = document.getElementById('drag-drop-area');
-      if (uptarg)
-      {
-        var uppy = Uppy.Core().use(Uppy.Dashboard,
-        {
-          inline: true,
-          target: uptarg,
-          proudlyDisplayPoweredByUppy: false,
-          theme: 'dark',
-          width: 770,
-          height: 210,
-          plugins: ['Webcam']
-        }).use(Uppy.Tus,
-        {
-          endpoint: 'https://master.tus.io/files/'
-        });
-        uppy.on('complete', (result) =>
-        {
-          console.log('Upload complete! We’ve uploaded these files:', result.successful)
-        });
-      }
-    </script> -->
-    <script src="./src/assets/js/apps.js"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="./src/assets/js/bootstrap.js"></script>
+  <!-- SmartMenus jQuery plugin -->
+  <script type="text/javascript" src="./src/assets/js/jquery.smartmenus.js"></script>
+  <!-- SmartMenus jQuery Bootstrap Addon -->
+  <script type="text/javascript" src="./src/assets/js/jquery.smartmenus.bootstrap.js"></script>
+  <!-- To Slider JS -->
+  <script src="./src/assets/js/sequence.js"></script>
+  <script src="./src/assets/js/sequence-theme.modern-slide-in.js"></script>
+  <!-- Product view slider -->
+  <script type="text/javascript" src="./src/assets/js/jquery.simpleGallery.js"></script>
+  <script type="text/javascript" src="./src/assets/js/jquery.simpleLens.js"></script>
+  <!-- slick slider -->
+  <script type="text/javascript" src="./src/assets/js/slick.js"></script>
+  <!-- Price picker slider -->
+  <script type="text/javascript" src="./src/assets/js/nouislider.js"></script>
+  <!-- Custom js -->
+  <script src="./src/assets/js/custom.js"></script>
 
-      function gtag()
-      {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'UA-56159088-1');
-    </script>
+
+  <!-- Dashboard -->
+  <!-- container-scroller -->
+    <!-- plugins:js -->
+    <!-- <script src="./src/assets/admin/vendors/js/vendor.bundle.base.js"></script> -->
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="./src/assets/admin/vendors/chart.js/Chart.min.js"></script>
+    <script src="./src/assets/admin/js/jquery.cookie.js" type="text/javascript"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="./src/assets/admin/js/off-canvas.js"></script>
+    <script src="./src/assets/admin/js/hoverable-collapse.js"></script>
+    <script src="./src/assets/admin/js/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="./src/assets/admin/js/dashboard.js"></script>
+    <script src="./src/assets/admin/js/todolist.js"></script>
+    <!-- End custom js for this page -->
 </body>
 
 </html>

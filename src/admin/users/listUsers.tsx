@@ -1,171 +1,147 @@
+import { Button, message, Popconfirm, Space, Table } from "antd";
+import type { ColumnsType, TableProps } from "antd/es/table";
 import { Link } from "react-router-dom";
-import { AppDispatch, RootState } from "../../store";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUsersAll, fetchUsersRemove } from "../../redux/user.reducer";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { message } from "antd";
+import { RootState } from "../../store";
+import { fetchCategoriesAll } from "../../redux/categories.reducer";
+import { fetchMaterialRemove } from "../../redux/material.reducer";
+import { IUser } from "../../models/user";
+import { fetchUsersAll, fetchUsersRemove } from "../../redux/user.reducer";
+
+interface CategoryData extends IUser {
+  recordKey: string;
+}
+
+interface DataType {
+  key: string;
+  name: string;
+  email: string;
+  role: string;
+}
 
 const ListUsersPage = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.users);
-  const fetchMaterial = async () => {
-    try {
-      await dispatch(fetchUsersAll()).unwrap();
-    } catch (error) {
-      /* empty */
-    }
-  };
-  console.log(user);
-
+  const dispatch = useDispatch();
   useEffect(() => {
-    fetchMaterial();
+    dispatch(fetchUsersAll());
   }, []);
-
-  const checkDelete = async (id: string) => {
-    const tb = window.confirm("Are you sure you want to delete");
-    if (tb) {
-      await dispatch(fetchUsersRemove(id)).unwrap();
-      await dispatch(fetchUsersAll()).unwrap();
-      message.success({ content: "Xóa thành công", key: "" });
+  const datass: IUser[] = user;
+  const confirmDelete = async (userId: string) => {
+    try {
+      await dispatch(fetchUsersRemove(userId));
+      await dispatch(fetchUsersAll());
+      message.success("Người dùng đã được xóa thành cong");
+    } catch (error) {
+      if (!error) {
+        setTimeout(message.loading("đang sử lí .."), 2000);
+      } else {
+        message.error(`Lỗi khi xóa người dùng này: ${error}`);
+      }
     }
   };
+
+  const cancelDelete = () => {
+    message.error("Bạn đã hủy thao tác xóa");
+  };
+
+  const uniqueNames = Array.from(
+    new Set(datass?.map((user: any) => user.name))
+  );
+  const uniqueEmail = Array.from(
+    new Set(datass?.map((user: any) => user.email))
+  );
+  const uniqueRole = Array.from(
+    new Set(datass?.map((user: any) => user.role))
+  );
+  const nameFilters = uniqueNames.map((name) => ({ text: name, value: name }));
+  const emailFilters = uniqueEmail.map((email) => ({ text: email, value: email }));
+  const roleFilters = uniqueRole.map((role) => ({ text: role, value: role }));
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      width: "30%",
+      filters: nameFilters,
+      onFilter: (value, record) => record.name.indexOf(value.toString()) === 0,
+      sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      width: "30%",
+      filters: emailFilters,
+      onFilter: (value, record) => record.email.indexOf(value.toString()) === 0,
+      sorter: (a, b) => a.email.localeCompare(b.email),
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      width: "30%",
+      filters: roleFilters,
+      onFilter: (value, record) => record.role.indexOf(value.toString()) === 0,
+      sorter: (a, b) => a.role.localeCompare(b.role),
+    },
+    {
+      title: "Action",
+      dataIndex: "",
+      key: "x",
+      width: "20%",
+      render: (_, record) => (
+        <Space size="middle">
+          <Link to={`/admin/update/${record.key}`}>
+            <Button className="btn-edit text-[#30D200] border-[#31d200cb] hover:text-[#31d200ba] hover:border-[#30D200] active:border-[#30D200]">
+              Edit
+            </Button>
+          </Link>
+          <Popconfirm
+            title="Bạn có chắc chắn là muốn xóa người dùng này?"
+            onConfirm={() => confirmDelete(record.key)}
+            onCancel={cancelDelete}
+            okText="Đồng ý"
+            cancelText="Không"
+          >
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
+
+  const data: DataType[] = datass?.map((user) => ({
+    key: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  }));
+
+  const categoryData: CategoryData[] = datass?.map((category) => ({
+    ...category,
+    recordKey: category._id,
+  }));
+  console.log(categoryData);
+
+  const handleTableChange: TableProps<DataType>["onChange"] = (
+    pagination,
+    filters,
+    sorter,
+    extra
+  ) => {
+    console.log("Table parameters:", pagination, filters, sorter, extra);
+  };
+
   return (
-    <main role="main" className="main-content">
-      <div className="container-fluid">
-        <div className="row justify-content-center">
-          <div className="col-12">
-            <div className="row">
-              {/* Small table */}
-              <div className="col-md-12 my-4">
-                <h2 className="h4 mb-1">Users</h2>
-                <p className="mb-3">
-                  Additional table rendering with vertical border, rich content
-                  formatting for cell
-                </p>
-                <div className="card shadow">
-                  <div className="card-body">
-                    <div className="toolbar">
-                      <form className="form">
-                        <div className="form-row">
-                          <div className="form-group col-auto">
-                            <label htmlFor="search" className="sr-only">
-                              Search
-                            </label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="search1"
-                              defaultValue=""
-                              placeholder="Search"
-                            />
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    {/* table */}
-                    <table className="table table-borderless table-hover">
-                      <thead>
-                        <tr>
-                          <td>AVATAR</td>
-                          <th>User</th>
-                          <th>Email</th>
-                          <th>Contact</th>
-                          <th>Address</th>
-                          <th>Role</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {user.map((item, index) => (
-                          <tr>
-                            <td>
-                              <div className="avatar avatar-md">
-                                <img
-                                  src="../../assets/images/avatars/face-3.jpg"
-                                  alt="..."
-                                  className="avatar-img rounded-circle"
-                                />
-                              </div>
-                            </td>
-                            <td>
-                              <p className="mb-0 text-muted">
-                                <strong>{item.name}</strong>
-                              </p>
-                            </td>
-                            <td>
-                              <p className="mb-0 text-muted">{item.email}</p>
-                            </td>
-                            <td>
-                              <p className="mb-0 text-muted">
-                                <a href="#" className="text-muted">
-                                  (958) 421-0798
-                                </a>
-                              </p>
-                              <small className="mb-0 text-muted">Nigeria</small>
-                            </td>
-                            <td className="w-25">
-                              <small className="text-muted">
-                                {" "}
-                                Egestas integer eget aliquet nibh praesent. In
-                                hac habitasse platea dictumst quisque sagittis
-                                purus.
-                              </small>
-                            </td>
-                            <td className="text-muted">{item.role}</td>
-                            <td>
-                              <Link to="/admin/updatePro">
-                                <span className="badge badge-warning me-3">
-                                  Update
-                                </span>
-                              </Link>
-                              <button onClick={() => checkDelete(item._id)}>
-                                <span className="badge badge-danger">
-                                  Delete
-                                </span>
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    <nav aria-label="Table Paging" className="mb-0 text-muted">
-                      <ul className="pagination justify-content-center mb-0">
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            Previous
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            1
-                          </a>
-                        </li>
-                        <li className="page-item active">
-                          <a className="page-link" href="#">
-                            2
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            3
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="#">
-                            Next
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
-              </div>{" "}
-              {/* customized table */}
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
+    <div id="adminhome">
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={{ pageSize:6 }}
+        onChange={handleTableChange}
+      />
+    </div>
   );
 };
 
